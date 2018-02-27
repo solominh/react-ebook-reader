@@ -2,16 +2,17 @@ import React, { Component } from "react";
 import logo from "./logo.svg";
 import "./App.css";
 import Drawer from "./components/Drawer";
-import epubLink from "./res/ebook/dragon-king.epub";
+// import epubLink from "./res/ebook/dragon-king.epub";
+import epubLink from "./res/ebook/Frankenstein.epub";
 import EbookFrame from "./components/EbookFrame";
 
 class App extends Component {
   state = {
+    isLoading: true,
     book: null,
     toc: null,
-    isLoading: true
+    selectedChapter: null
   };
-  componentWillMount() {}
 
   componentDidMount() {
     let book = window.ePub(epubLink);
@@ -26,38 +27,76 @@ class App extends Component {
 
     book.renderTo("area");
 
-    book.ready.all.then(() => {
-      this.setState({ isLoading: false });
-    });
+    book.ready.all
+      .then(() => {
+        console.log(book);
+        book.tocIndexBySpine = book.toc.reduce((prev, cur, index) => {
+          prev[cur.spinePos] = index;
+          return prev;
+        }, {});
+        this.setState({
+          isLoading: false,
+          selectedChapter: book.tocIndexBySpine[book.currentChapter.spinePos]
+        });
+
+        book.on("renderer:locationChanged", location => {
+          this.setState({
+            selectedChapter: book.tocIndexBySpine[book.currentChapter.spinePos]
+          });
+        });
+      })
+      .catch(err => {
+        console.log(err);
+      });
 
     this.setState({ book });
   }
 
+  componentWillUnmount() {
+    if (this.state.book) {
+      const { book } = this.state;
+      book.off("renderer:locationChanged");
+    }
+  }
+
   onBtnPrevClicked = () => {
-    this.state.book.prevPage();
+    const { book } = this.state;
+    book.prevPage();
   };
 
   onBtnNextClicked = () => {
-    this.state.book.nextPage();
+    const { book } = this.state;
+    book.nextPage();
   };
 
-  onRowSelected=(index)=>{
-    if(!this.state.toc) return;
+  onItemSelected = index => {
+    if (!this.state.toc) return;
 
-    this.state.book.goto(this.state.toc[index].href)
-  }
+    const { book, toc } = this.state;
+    this.setState({ selectedChapter: index });
+    book.goto(toc[index].href);
+  };
+
+  onDrawerTransition = () => {
+    const { book } = this.state;
+    var currentPosition = book.getCurrentLocationCfi();
+    book.gotoCfi(currentPosition);
+  };
   render() {
-    const { toc, isLoading } = this.state;
+    const { toc, isLoading, selectedChapter } = this.state;
     return (
-      <div className="App">
-        <Drawer toc={toc} onRowSelected={this.onRowSelected}>
-          <EbookFrame
-            isLoading={isLoading}
-            onBtnPrevClicked={this.onBtnPrevClicked}
-            onBtnNextClicked={this.onBtnNextClicked}
-          />
-        </Drawer>
-      </div>
+      <Drawer
+        toc={toc}
+        selectedItem={selectedChapter}
+        onItemSelected={this.onItemSelected}
+        onDrawerTransition={this.onDrawerTransition}
+      >
+        <EbookFrame
+          isLoading={isLoading}
+          onBtnPrevClicked={this.onBtnPrevClicked}
+          onBtnNextClicked={this.onBtnNextClicked}
+        />
+      </Drawer>
     );
   }
 }

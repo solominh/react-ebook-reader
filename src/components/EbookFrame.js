@@ -4,7 +4,7 @@ import { withStyles } from "material-ui/styles";
 import cn from "classnames";
 
 const styles = theme => ({
-  main: {
+  wrapper: {
     position: "absolute",
     width: "100%",
     height: "100%"
@@ -16,7 +16,8 @@ const styles = theme => ({
     maxWidth: 1250,
     "& iframe": {
       border: "none"
-    }
+    },
+    fontSize:"10px!important"
   },
   arrow: {
     position: "absolute",
@@ -52,7 +53,7 @@ class EbookFrame extends Component {
       isLoading
     } = this.props;
     return (
-      <div className={classes.main}>
+      <div className={classes.wrapper}>
         <div
           className={cn(classes.prev, classes.arrow)}
           onClick={onBtnPrevClicked}

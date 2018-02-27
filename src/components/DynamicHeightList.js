@@ -20,7 +20,7 @@ const styles = {
     height: "100%"
   },
   list: {
-    // border: "1px solid #eee",
+    border: "1px solid #eee",
     "& .item": {
       borderBottom: "1px solid #eee",
       padding: "0.5rem",
@@ -35,20 +35,8 @@ const styles = {
   }
 };
 
-class TOC extends Component {
-  state = {
-    mode: "cells",
-    isClickable: true,
-    scrollToRow: 0,
-    selectedRow: 0
-  };
-
+class DynamicHeightList extends Component {
   onItemSelected = index => {
-    this.setState({
-      selectedRow: index,
-      scrollToRow: index
-    });
-
     this.props.onItemSelected(index);
   };
 
@@ -64,6 +52,7 @@ class TOC extends Component {
     const { data, selectedItem } = this.props;
     const item = data[index];
 
+    // Should not check null selectedItem
     const itemClassName = selectedItem === index ? "item selected" : "item";
 
     return (
@@ -83,7 +72,9 @@ class TOC extends Component {
             this.onItemSelected(index);
           }}
         >
-          <strong>{item.label.trim()}</strong>
+          <strong>{item.name}</strong>
+          {":"}
+          {item.text}
         </div>
       </CellMeasurer>
     );
@@ -106,12 +97,12 @@ class TOC extends Component {
 
           return (
             <List
-              ref={ref => (list = ref)}
               className={classes.list}
+              ref={ref => (list = ref)}
               deferredMeasurementCache={cache}
-              rowCount={data.length}
               width={width}
               height={height}
+              rowCount={data.length}
               rowHeight={cache.rowHeight}
               rowRenderer={this.rowRenderer}
               selectedRow={selectedItem}
@@ -123,4 +114,4 @@ class TOC extends Component {
   }
 }
 
-export default withStyles(styles)(TOC);
+export default withStyles(styles)(DynamicHeightList);
