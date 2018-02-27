@@ -15,6 +15,10 @@ import MenuIcon from "material-ui-icons/Menu";
 import ChevronLeftIcon from "material-ui-icons/ChevronLeft";
 import ChevronRightIcon from "material-ui-icons/ChevronRight";
 
+import { Link } from "react-router-dom";
+import OpenEbookIcon from "material-ui-icons/FolderOpen";
+import HomeIcon from "material-ui-icons/Home";
+
 import TOC from "./TOC";
 
 const drawerWidth = 240;
@@ -81,9 +85,8 @@ const styles = theme => ({
   },
   content: {
     width: "100%",
-    flexGrow: 1,
+    flex: 1,
     backgroundColor: theme.palette.background.default,
-    padding: theme.spacing.unit * 3,
     transition: theme.transitions.create("margin", {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen
@@ -200,8 +203,14 @@ class PersistentDrawer extends React.Component {
                 <MenuIcon />
               </IconButton>
               <Typography variant="title" color="inherit" noWrap>
-                Persistent drawer
+                Ebook Reader
               </Typography>
+              <Link to="/">
+                <HomeIcon />
+              </Link>
+              <Link to="/OpenEbook">
+                <OpenEbookIcon />
+              </Link>
             </Toolbar>
           </AppBar>
           {before}

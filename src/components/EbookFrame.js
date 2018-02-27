@@ -2,27 +2,48 @@ import React, { Component } from "react";
 import { BeatLoader } from "halogenium";
 import { withStyles } from "material-ui/styles";
 import cn from "classnames";
+import Footer from "./Footer";
 
 const styles = theme => ({
   wrapper: {
-    position: "absolute",
     width: "100%",
-    height: "100%"
+    height: "100%",
+    display: "flex",
+    flexDirection: "column"
   },
-  area: {
-    width: "80%",
-    height: "80%",
-    margin: "5% auto",
-    maxWidth: 1250,
+  readingArea: {
+    position: "relative",
+    flex: 1,
+    width: "100%"
+  },
+  footer: {
+    width: "100%",
+    height: 64
+  },
+  textWrapper: {
+    width: "100%",
+    height: "100%",
+    position: "absolute",
+    padding: 20,
+    margin: "0px auto",
+    // maxWidth: 1250,
     "& iframe": {
       border: "none"
-    },
-    fontSize:"10px!important"
+    }
   },
-  arrow: {
+  navWrapper: {
+    width: "100%",
+    height: "100%",
     position: "absolute",
-    top: "50%",
-    marginTop: -32,
+    display: "flex",
+    alignItems: "stretch"
+  },
+  navMiddle: {
+    flex: 1
+  },
+  arrowWrapper: {
+    width: "40%",
+    height: "100%",
     fontSize: 64,
     color: "#E2E2E2",
     fontFamily: "arial, sans-serif",
@@ -34,13 +55,21 @@ const styles = theme => ({
     },
     "&:active": {
       color: "#000"
-    }
+    },
+    display: "flex",
+    alignItems: "center"
   },
-  prev: {
-    left: 40
+  arrowWrapperLeft: {
+    justifyContent: "flex-start"
   },
-  next: {
-    right: 40
+  arrowWrapperRight: {
+    justifyContent: "flex-end"
+  },
+  arrowLeft: {
+    marginLeft: 50
+  },
+  arrowRight: {
+    marginRight: 50
   }
 });
 
@@ -54,21 +83,30 @@ class EbookFrame extends Component {
     } = this.props;
     return (
       <div className={classes.wrapper}>
-        <div
-          className={cn(classes.prev, classes.arrow)}
-          onClick={onBtnPrevClicked}
-        >
-          ‹
-        </div>
-        <div id="area" className={classes.area} />
-        <div
-          className={cn(classes.next, classes.arrow)}
-          onClick={onBtnNextClicked}
-        >
-          ›
-        </div>
+        <div className={classes.readingArea}>
+          <div className={classes.textWrapper} id="area" />
+          <div className={classes.navWrapper}>
+            <div
+              className={cn(classes.arrowWrapper, classes.arrowWrapperLeft)}
+              onClick={onBtnPrevClicked}
+            >
+              <div className={classes.arrowLeft}>‹</div>
+            </div>
+            <div className={classes.navMiddle} />
 
-        {isLoading && <BeatLoader color="#26A65B" size="16px" margin="4px" />}
+            <div
+              className={cn(classes.arrowWrapper, classes.arrowWrapperRight)}
+              onClick={onBtnNextClicked}
+            >
+              <div className={classes.arrowRight}>›</div>
+            </div>
+          </div>
+
+          {isLoading && <BeatLoader color="#26A65B" size="16px" margin="4px" />}
+        </div>
+        <div className={classes.footer}>
+          <Footer />
+        </div>
       </div>
     );
   }

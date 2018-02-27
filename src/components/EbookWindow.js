@@ -1,12 +1,9 @@
 import React, { Component } from "react";
-import logo from "./logo.svg";
-import "./App.css";
-import Drawer from "./components/Drawer";
-// import epubLink from "./res/ebook/dragon-king.epub";
-import epubLink from "./res/ebook/Frankenstein.epub";
-import EbookFrame from "./components/EbookFrame";
+import Drawer from "./Drawer";
+import epubLink from "../res/ebook/dragon-king.epub";
+import EbookFrame from "./EbookFrame";
 
-class App extends Component {
+class EbookWindow extends Component {
   state = {
     isLoading: true,
     book: null,
@@ -78,9 +75,9 @@ class App extends Component {
   };
 
   onDrawerTransition = () => {
-    const { book } = this.state;
-    var currentPosition = book.getCurrentLocationCfi();
-    book.gotoCfi(currentPosition);
+    // const { book } = this.state;
+    // var currentPosition = book.getCurrentLocationCfi();
+    // book.gotoCfi(currentPosition);
   };
   render() {
     const { toc, isLoading, selectedChapter } = this.state;
@@ -101,4 +98,4 @@ class App extends Component {
   }
 }
 
-export default App;
+export default EbookWindow;
