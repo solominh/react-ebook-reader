@@ -5,6 +5,7 @@ import { CircularProgress } from "material-ui/Progress";
 import cn from "classnames";
 import Footer from "./Footer";
 import ReadingProgressSlider from "./ReadingProgressSlider";
+import Collapse from "material-ui/transitions/Collapse";
 
 const styles = theme => ({
   wrapper: {
@@ -100,7 +101,7 @@ class EbookFrame extends Component {
       readingProgress,
       onSliderChange,
       onSliderAfterChange,
-      isReadingProgressSliderOpen, 
+      isReadingProgressSliderOpen,
       onReadingProgressClick
     } = this.props;
     return (
@@ -137,15 +138,15 @@ class EbookFrame extends Component {
             onReadingProgressClick={onReadingProgressClick}
           />
         </div>
-        {isReadingProgressSliderOpen&&
-          (<div className={classes.slider}>
+        <Collapse in={isReadingProgressSliderOpen}>
+          <div className={classes.slider}>
             <ReadingProgressSlider
               readingProgress={readingProgress}
               onChange={onSliderChange}
               onAfterChange={onSliderAfterChange}
             />
-          </div>)
-        }
+          </div>
+        </Collapse>
       </div>
     );
   }
