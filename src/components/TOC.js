@@ -83,7 +83,7 @@ class TOC extends Component {
             this.onItemSelected(index);
           }}
         >
-          <strong>{item.label.trim()}</strong>
+          {item.label.trim()}
         </div>
       </CellMeasurer>
     );

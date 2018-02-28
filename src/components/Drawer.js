@@ -224,10 +224,3 @@ PersistentDrawer.propTypes = {
 };
 
 export default withStyles(styles, { withTheme: true })(PersistentDrawer);
-
-{/* <Link to="/">
-                <HomeIcon />
-              </Link>
-              <Link to="/OpenEbook">
-                <OpenEbookIcon />
-              </Link> */}

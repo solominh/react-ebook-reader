@@ -18,7 +18,7 @@ const styles = theme => ({
     flex: 1
   },
   readingProgress: {
-    fontSize:"1rem"
+    fontSize:"1rem",
   }
 });
 
@@ -32,12 +32,12 @@ class Footer extends Component {
     } = this.props;
     return (
       <div className={classes.wrapper}>
-        <IconButton aria-label="Open TOC" onClick={toggleTOC}>
+        <IconButton aria-label="Open TOC" onClick={toggleTOC} >
           <TOCIcon />
         </IconButton>
         <div className={classes.spacing} />
 
-        <IconButton aria-label="Open TOC" onClick={clickReadingProgress}>
+        <IconButton aria-label="Open TOC" style={{width:"80px"}} onClick={clickReadingProgress}>
           <div className={classes.readingProgress}>{`${
             readingProgress ? readingProgress.toFixed(2) : 0
           } %`}</div>

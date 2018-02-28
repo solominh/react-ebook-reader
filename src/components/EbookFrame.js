@@ -29,7 +29,7 @@ const styles = theme => ({
     flexDirection: "column",
     flex: 1
   },
-  TOCWrapper: {
+  TOCSidebar: {
     width: TOCWidth,
     height: "100%",
     visibility: "hidden",
@@ -39,11 +39,18 @@ const styles = theme => ({
     transition: theme.transitions.create(["margin"], {
       easing: theme.transitions.easing.easeOut,
       duration: theme.transitions.duration.enteringScreen
-    })
+    }),
+    display: "flex",
+    flexDirection: "column"
   },
-  TOCWrapperOpen: {
+  TOCSidebarOpen: {
     visibility: "visible",
     marginLeft: 0
+  },
+  TOCWrapper: {
+    width: "100%",
+    flex: 1,
+    // padding:4
   },
   readingArea: {
     position: "relative",
@@ -119,6 +126,13 @@ const styles = theme => ({
     display: "flex",
     alignItems: "center",
     justifyContent: "center"
+  },
+  bookTitle: {
+    fontSize: "1.2rem",
+    textAlign: "center",
+    fontWeight:"bold",
+    padding:8,
+    
   }
 });
 
@@ -137,25 +151,25 @@ class EbookFrame extends Component {
     } = this.props;
 
     const toc = book ? book.toc : null;
-    console.log(currentChapterIndex);
 
     return (
       <div className={classes.wrapper}>
-        {/* <Slide direction="right" in={isTOCOpen}>
-          <div className={classes.TOCWrapper}>abc</div>
-        </Slide> */}
         <div
-          className={cn(classes.TOCWrapper, {
-            [classes.TOCWrapperOpen]: isTOCOpen
+          className={cn(classes.TOCSidebar, {
+            [classes.TOCSidebarOpen]: isTOCOpen
           })}
         >
-          <TOC
-            data={toc}
-            selectedItem={currentChapterIndex}
-            onItemSelected={gotoChapter}
-          />
+          <div className={classes.bookTitle}>
+            {book ? book.metadata.bookTitle : ""}
+          </div>
+          <div className={classes.TOCWrapper}>
+            <TOC
+              data={toc}
+              selectedItem={currentChapterIndex}
+              onItemSelected={gotoChapter}
+            />
+          </div>
         </div>
-
 
         <div className={classes.contentWrapper}>
           <div className={classes.readingArea}>
