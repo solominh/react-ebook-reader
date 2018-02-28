@@ -24,9 +24,9 @@ const styles = theme => ({
   },
   slider: {
     width: "100%",
-    padding:"20px 20px 20px 20px",
-    backgroundColor:"#EEEEEE",
-    borderTop:"1px solid #616161"
+    padding: "20px 20px 20px 20px",
+    backgroundColor: "#EEEEEE",
+    borderTop: "1px solid #616161"
   },
   textWrapper: {
     width: "100%",
@@ -99,7 +99,9 @@ class EbookFrame extends Component {
       isLoading,
       readingProgress,
       onSliderChange,
-      onSliderAfterChange
+      onSliderAfterChange,
+      isReadingProgressSliderOpen, 
+      onReadingProgressClick
     } = this.props;
     return (
       <div className={classes.wrapper}>
@@ -130,15 +132,20 @@ class EbookFrame extends Component {
           )}
         </div>
         <div className={classes.footer}>
-          <Footer readingProgress={readingProgress} />
-        </div>
-        <div className={classes.slider}>
-          <ReadingProgressSlider
+          <Footer
             readingProgress={readingProgress}
-            onChange={onSliderChange}
-            onAfterChange={onSliderAfterChange}
+            onReadingProgressClick={onReadingProgressClick}
           />
         </div>
+        {isReadingProgressSliderOpen&&
+          (<div className={classes.slider}>
+            <ReadingProgressSlider
+              readingProgress={readingProgress}
+              onChange={onSliderChange}
+              onAfterChange={onSliderAfterChange}
+            />
+          </div>)
+        }
       </div>
     );
   }

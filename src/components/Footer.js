@@ -9,17 +9,23 @@ const styles = theme => ({
   },
   spacing: {
     flex: 1
+  },
+  readingProgress:{
+    cursor:"pointer"
   }
 });
 
 class Footer extends Component {
   render() {
-    const { classes, readingProgress } = this.props;
+    const { classes, readingProgress, onReadingProgressClick } = this.props;
     return (
       <div className={classes.wrapper}>
         <TOCIcon />
         <div className={classes.spacing} />
-        <div>{`${readingProgress ? readingProgress.toFixed(2) : 0} %`}</div>
+        <div
+          className={classes.readingProgress}
+          onClick={onReadingProgressClick}
+        >{`${readingProgress ? readingProgress.toFixed(2) : 0} %`}</div>
       </div>
     );
   }

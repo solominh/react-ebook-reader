@@ -10,7 +10,8 @@ class EbookWindow extends Component {
     book: null,
     toc: null,
     selectedChapter: null,
-    readingProgress: null
+    readingProgress: null,
+    isReadingProgressSliderOpen: true
   };
 
   calReadingProgress = book => {
@@ -147,11 +148,25 @@ class EbookWindow extends Component {
   };
 
   onSliderAfterChange = value => {
-    const {book} = this.state
+    const { book } = this.state;
     book.gotoPercentage(value / 100);
   };
+
+  onReadingProgressClick = () => {
+    this.setState(prevState => {
+      return {
+        isReadingProgressSliderOpen: !prevState.isReadingProgressSliderOpen
+      };
+    });
+  };
   render() {
-    const { toc, isLoading, selectedChapter, readingProgress } = this.state;
+    const {
+      toc,
+      isLoading,
+      selectedChapter,
+      readingProgress,
+      isReadingProgressSliderOpen
+    } = this.state;
     return (
       <Drawer
         toc={toc}
@@ -166,6 +181,8 @@ class EbookWindow extends Component {
           onBtnNextClicked={this.onBtnNextClicked}
           onSliderChange={this.onSliderChange}
           onSliderAfterChange={this.onSliderAfterChange}
+          isReadingProgressSliderOpen={isReadingProgressSliderOpen}
+          onReadingProgressClick={this.onReadingProgressClick}
         />
       </Drawer>
     );
