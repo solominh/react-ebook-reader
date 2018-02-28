@@ -6,18 +6,44 @@ import cn from "classnames";
 import Footer from "./Footer";
 import ReadingProgressSlider from "./ReadingProgressSlider";
 import Collapse from "material-ui/transitions/Collapse";
+import Slide from "material-ui/transitions/Slide";
+import TOC from "./TOC";
 
 import { withRouter } from "react-router";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { clickPrevButton, clickNextButton } from "../actions";
+import { clickPrevButton, clickNextButton, gotoChapter } from "../actions";
+
+const TOCWidth = 240;
 
 const styles = theme => ({
   wrapper: {
     width: "100%",
     height: "100%",
     display: "flex",
-    flexDirection: "column"
+    alignItems: "stretch"
+  },
+  contentWrapper: {
+    height: "100%",
+    display: "flex",
+    flexDirection: "column",
+    flex: 1
+  },
+  TOCWrapper: {
+    width: TOCWidth,
+    height: "100%",
+    visibility: "hidden",
+    marginLeft: -TOCWidth,
+    backgroundColor: "#FFFFFF",
+    border: "1px solid #eee",
+    transition: theme.transitions.create(["margin"], {
+      easing: theme.transitions.easing.easeOut,
+      duration: theme.transitions.duration.enteringScreen
+    })
+  },
+  TOCWrapperOpen: {
+    visibility: "visible",
+    marginLeft: 0
   },
   readingArea: {
     position: "relative",
@@ -100,47 +126,73 @@ class EbookFrame extends Component {
   render() {
     const {
       classes,
+      book,
+      currentChapterIndex,
       isLoading,
       isReadingProgressSliderOpen,
+      isTOCOpen,
       clickPrevButton,
-      clickNextButton
+      clickNextButton,
+      gotoChapter
     } = this.props;
+
+    const toc = book ? book.toc : null;
+    console.log(currentChapterIndex);
+
     return (
       <div className={classes.wrapper}>
-        <div className={classes.readingArea}>
-          <div className={classes.textWrapper} id="area" />
-          <div className={classes.navWrapper}>
-            <div
-              className={cn(classes.arrowWrapper, classes.arrowWrapperLeft)}
-              onClick={clickPrevButton}
-            >
-              <div className={classes.arrowLeft}>‹</div>
-            </div>
-            <div className={classes.navMiddle} />
-
-            <div
-              className={cn(classes.arrowWrapper, classes.arrowWrapperRight)}
-              onClick={clickNextButton}
-            >
-              <div className={classes.arrowRight}>›</div>
-            </div>
-          </div>
-
-          {isLoading && (
-            <div className={classes.loadingWrapper}>
-              <BeatLoader color="#26A65B" size="16px" margin="4px" />
-              {/* <CircularProgress/> */}
-            </div>
-          )}
+        {/* <Slide direction="right" in={isTOCOpen}>
+          <div className={classes.TOCWrapper}>abc</div>
+        </Slide> */}
+        <div
+          className={cn(classes.TOCWrapper, {
+            [classes.TOCWrapperOpen]: isTOCOpen
+          })}
+        >
+          <TOC
+            data={toc}
+            selectedItem={currentChapterIndex}
+            onItemSelected={gotoChapter}
+          />
         </div>
-        <div className={classes.footer}>
-          <Footer />
-        </div>
-        <Collapse in={isReadingProgressSliderOpen}>
-          <div className={classes.slider}>
-            <ReadingProgressSlider />
+
+
+        <div className={classes.contentWrapper}>
+          <div className={classes.readingArea}>
+            <div className={classes.textWrapper} id="area" />
+            <div className={classes.navWrapper}>
+              <div
+                className={cn(classes.arrowWrapper, classes.arrowWrapperLeft)}
+                onClick={clickPrevButton}
+              >
+                <div className={classes.arrowLeft}>‹</div>
+              </div>
+              <div className={classes.navMiddle} />
+
+              <div
+                className={cn(classes.arrowWrapper, classes.arrowWrapperRight)}
+                onClick={clickNextButton}
+              >
+                <div className={classes.arrowRight}>›</div>
+              </div>
+            </div>
+
+            {isLoading && (
+              <div className={classes.loadingWrapper}>
+                <BeatLoader color="#26A65B" size="16px" margin="4px" />
+                {/* <CircularProgress/> */}
+              </div>
+            )}
           </div>
-        </Collapse>
+          <div className={classes.footer}>
+            <Footer />
+          </div>
+          <Collapse in={isReadingProgressSliderOpen}>
+            <div className={classes.slider}>
+              <ReadingProgressSlider />
+            </div>
+          </Collapse>
+        </div>
       </div>
     );
   }
@@ -148,11 +200,24 @@ class EbookFrame extends Component {
 
 EbookFrame = withStyles(styles)(EbookFrame);
 
-const mapStateToProps = ({ isLoading, isReadingProgressSliderOpen }) => {
-  return { isLoading, isReadingProgressSliderOpen };
+const mapStateToProps = ({
+  book,
+  currentChapterIndex,
+  isLoading,
+  isReadingProgressSliderOpen,
+  isTOCOpen
+}) => {
+  return {
+    book,
+    currentChapterIndex,
+    isLoading,
+    isReadingProgressSliderOpen,
+    isTOCOpen
+  };
 };
 
 export default connect(mapStateToProps, {
   clickPrevButton,
-  clickNextButton
+  clickNextButton,
+  gotoChapter
 })(EbookFrame);

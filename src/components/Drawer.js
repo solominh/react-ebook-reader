@@ -132,12 +132,6 @@ class PersistentDrawer extends React.Component {
     this.setState({ open: false });
   };
 
-  handleChangeAnchor = event => {
-    this.setState({
-      anchor: event.target.value
-    });
-  };
-
   render() {
     const { classes, theme, toc, selectedItem, onItemSelected } = this.props;
     const { anchor, open } = this.state;
@@ -200,15 +194,8 @@ class PersistentDrawer extends React.Component {
               >
                 <MenuIcon />
               </IconButton>
-              <Typography variant="title" color="inherit" noWrap>
-                Ebook Reader
-              </Typography>
-              <Link to="/">
-                <HomeIcon />
-              </Link>
-              <Link to="/OpenEbook">
-                <OpenEbookIcon />
-              </Link>
+            
+              
             </Toolbar>
           </AppBar>
           {before}
@@ -237,3 +224,10 @@ PersistentDrawer.propTypes = {
 };
 
 export default withStyles(styles, { withTheme: true })(PersistentDrawer);
+
+{/* <Link to="/">
+                <HomeIcon />
+              </Link>
+              <Link to="/OpenEbook">
+                <OpenEbookIcon />
+              </Link> */}

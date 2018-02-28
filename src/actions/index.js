@@ -20,6 +20,10 @@ export const clickReadingProgress = () => ({
   type: types.CLICK_READING_PROGRESS
 });
 
+export const toggleTOC = () => ({
+  type: types.TOGGLE_TOC,
+});
+
 export const changeReadingProgress = value => ({
   type: types.CHANGE_READING_PROGRESS,
   readingProgress: value
@@ -91,7 +95,11 @@ export const loadEbook = (url = epubLink) => {
 
       // Update selected chapter
       book.on("renderer:locationChanged", location => {
-        dispatch(changeReadingProgress(calReadingProgress(book)));
+        dispatch({
+          type:types.RENDERER_LOCATION_CHANGED,
+          readingProgress:calReadingProgress(book),
+          currentChapterIndex:book.tocIndexBySpine[book.currentChapter.spinePos]
+        })
       });
 
       // Update pagination

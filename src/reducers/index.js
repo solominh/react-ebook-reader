@@ -4,8 +4,10 @@ import { combineReducers } from "redux";
 const initialState = {
   isLoading: true,
   book: null,
+  currentChapterIndex: null,
   readingProgress: null,
-  isReadingProgressSliderOpen: true
+  isReadingProgressSliderOpen: true,
+  isTOCOpen: false
 };
 
 export default function(state = initialState, action) {
@@ -46,6 +48,19 @@ export default function(state = initialState, action) {
         ...state,
         isLoading: false,
         book: null
+      };
+    }
+    case types.TOGGLE_TOC: {
+      return {
+        ...state,
+        isTOCOpen: !state.isTOCOpen
+      };
+    }
+    case types.RENDERER_LOCATION_CHANGED: {
+      return {
+        ...state,
+        readingProgress: action.readingProgress,
+        currentChapterIndex: action.currentChapterIndex
       };
     }
   }
