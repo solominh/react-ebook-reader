@@ -1,9 +1,26 @@
+// import "./utils/polyfill";
 import React from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
+// import "typeface-roboto";
 import registerServiceWorker from "./registerServiceWorker";
-import DynamicHeightListExample from "./components/DynamicHeightListExample";
-import App from './components/App';
+import App from "./components/App";
+import configureStore from "./configureStore";
 
-ReactDOM.render(<App />, document.getElementById("root"));
+
+import { Provider, connect } from "react-redux";
+import { BrowserRouter, withRouter } from "react-router-dom";
+// import { ConnectedRouter } from "react-router-redux";
+
+const { store, history } = configureStore();
+
+ReactDOM.render(
+  <Provider store={store}>
+    <BrowserRouter history={history}>
+      <App />
+    </BrowserRouter>
+  </Provider>,
+  document.getElementById("root")
+);
+
 registerServiceWorker();

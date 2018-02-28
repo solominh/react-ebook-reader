@@ -7,6 +7,11 @@ import Footer from "./Footer";
 import ReadingProgressSlider from "./ReadingProgressSlider";
 import Collapse from "material-ui/transitions/Collapse";
 
+import { withRouter } from "react-router";
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+import { clickPrevButton, clickNextButton } from "../actions";
+
 const styles = theme => ({
   wrapper: {
     width: "100%",
@@ -95,14 +100,10 @@ class EbookFrame extends Component {
   render() {
     const {
       classes,
-      onBtnPrevClicked,
-      onBtnNextClicked,
       isLoading,
-      readingProgress,
-      onSliderChange,
-      onSliderAfterChange,
       isReadingProgressSliderOpen,
-      onReadingProgressClick
+      clickPrevButton,
+      clickNextButton
     } = this.props;
     return (
       <div className={classes.wrapper}>
@@ -111,7 +112,7 @@ class EbookFrame extends Component {
           <div className={classes.navWrapper}>
             <div
               className={cn(classes.arrowWrapper, classes.arrowWrapperLeft)}
-              onClick={onBtnPrevClicked}
+              onClick={clickPrevButton}
             >
               <div className={classes.arrowLeft}>‹</div>
             </div>
@@ -119,7 +120,7 @@ class EbookFrame extends Component {
 
             <div
               className={cn(classes.arrowWrapper, classes.arrowWrapperRight)}
-              onClick={onBtnNextClicked}
+              onClick={clickNextButton}
             >
               <div className={classes.arrowRight}>›</div>
             </div>
@@ -133,18 +134,11 @@ class EbookFrame extends Component {
           )}
         </div>
         <div className={classes.footer}>
-          <Footer
-            readingProgress={readingProgress}
-            onReadingProgressClick={onReadingProgressClick}
-          />
+          <Footer />
         </div>
         <Collapse in={isReadingProgressSliderOpen}>
           <div className={classes.slider}>
-            <ReadingProgressSlider
-              readingProgress={readingProgress}
-              onChange={onSliderChange}
-              onAfterChange={onSliderAfterChange}
-            />
+            <ReadingProgressSlider />
           </div>
         </Collapse>
       </div>
@@ -153,4 +147,12 @@ class EbookFrame extends Component {
 }
 
 EbookFrame = withStyles(styles)(EbookFrame);
-export default EbookFrame;
+
+const mapStateToProps = ({ isLoading, isReadingProgressSliderOpen }) => {
+  return { isLoading, isReadingProgressSliderOpen };
+};
+
+export default connect(mapStateToProps, {
+  clickPrevButton,
+  clickNextButton
+})(EbookFrame);

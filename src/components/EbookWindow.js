@@ -1,26 +1,13 @@
 import React, { Component } from "react";
 import Drawer from "./Drawer";
-import epubLink from "../res/ebook/dragon-king.epub";
 import EbookFrame from "./EbookFrame";
-import _ from "lodash";
+
+import { withRouter } from "react-router";
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+import { gotoChapter, loadEbook } from "../actions";
 
 class EbookWindow extends Component {
-  state = {
-    isLoading: true,
-    book: null,
-    toc: null,
-    selectedChapter: null,
-    readingProgress: null,
-    isReadingProgressSliderOpen: true
-  };
-
-  calReadingProgress = book => {
-    let percent = book.pagination.percentageFromCfi(
-      book.getCurrentLocationCfi()
-    );
-    return percent ? percent * 100 : null;
-  };
-
   /*this.settings = EPUBJS.core.defaults(options || {}, {
 		bookPath : undefined,
 		bookKey : undefined,
@@ -49,144 +36,48 @@ class EbookWindow extends Component {
   });
   */
   componentDidMount() {
-    let book = window.ePub(epubLink, {
-      gap: 20
-    });
-
-    book.getMetadata().then(meta => {
-      document.title = meta.bookTitle + " – " + meta.creator;
-    });
-
-    book.getToc().then(toc => {
-      this.setState({ toc });
-    });
-
-    book.renderTo("area");
-
-    book.ready.all
-      .then(() => {
-        console.log(book);
-        window.book = book;
-
-        // Generate page
-        book.generatePagination().then(toc => {
-          console.log("Pagination generated");
-          this.setState({
-            readingProgress: this.calReadingProgress(book)
-          });
-        });
-
-        // Create TOC index
-        book.tocIndexBySpine = book.toc.reduce((prev, cur, index) => {
-          prev[cur.spinePos] = index;
-          return prev;
-        }, {});
-        this.setState({
-          isLoading: false,
-          selectedChapter: book.tocIndexBySpine[book.currentChapter.spinePos]
-        });
-
-        // Update selected chapter
-        book.on("renderer:locationChanged", location => {
-          this.setState({
-            selectedChapter: book.tocIndexBySpine[book.currentChapter.spinePos],
-            readingProgress: this.calReadingProgress(book)
-          });
-        });
-
-        // Update pagination
-        book.on("renderer:resized", () => {
-          _.debounce(() => {
-            console.log("asdasdasd");
-            book.generatePagination().then(toc => {
-              console.log("Pagination generated");
-            });
-          }, 1000);
-        });
-      })
-      .catch(err => {
-        console.log(err);
-      });
-
-    this.setState({ book });
+    this.props.loadEbook();
   }
 
   componentWillUnmount() {
-    if (this.state.book) {
-      const { book } = this.state;
+    if (this.props.book) {
+      const { book } = this.props;
       book.off("renderer:locationChanged");
       book.off("renderer:resized");
     }
   }
 
-  onBtnPrevClicked = () => {
-    const { book } = this.state;
-    book.prevPage();
-  };
-
-  onBtnNextClicked = () => {
-    const { book } = this.state;
-    book.nextPage();
-  };
-
-  onItemSelected = index => {
-    if (!this.state.toc) return;
-
-    const { book, toc } = this.state;
-    this.setState({ selectedChapter: index });
-    book.goto(toc[index].href);
-  };
-
-  onDrawerTransition = () => {
-    // const { book } = this.state;
-    // var currentPosition = book.getCurrentLocationCfi();
-    // book.gotoCfi(currentPosition);
-  };
-
-  onSliderChange = value => {
-    this.setState({ readingProgress: value });
-  };
-
-  onSliderAfterChange = value => {
-    const { book } = this.state;
-    book.gotoPercentage(value / 100);
-  };
-
-  onReadingProgressClick = () => {
-    this.setState(prevState => {
-      return {
-        isReadingProgressSliderOpen: !prevState.isReadingProgressSliderOpen
-      };
-    });
-  };
   render() {
     const {
-      toc,
+      book,
       isLoading,
-      selectedChapter,
       readingProgress,
-      isReadingProgressSliderOpen
-    } = this.state;
+      isReadingProgressSliderOpen,
+      gotoChapter
+    } = this.props;
+
+    const selectedChapter = book
+      ? book.tocIndexBySpine[book.currentChapter.spinePos]
+      : null;
+    const toc = book ? book.toc : null;
+
     return (
       <Drawer
         toc={toc}
         selectedItem={selectedChapter}
-        onItemSelected={this.onItemSelected}
-        onDrawerTransition={this.onDrawerTransition}
+        onItemSelected={gotoChapter}
       >
-        <EbookFrame
-          isLoading={isLoading}
-          readingProgress={readingProgress}
-          onBtnPrevClicked={this.onBtnPrevClicked}
-          onBtnNextClicked={this.onBtnNextClicked}
-          onSliderChange={this.onSliderChange}
-          onSliderAfterChange={this.onSliderAfterChange}
-          isReadingProgressSliderOpen={isReadingProgressSliderOpen}
-          onReadingProgressClick={this.onReadingProgressClick}
-        />
+        <EbookFrame />
       </Drawer>
     );
   }
 }
 
-export default EbookWindow;
+const mapStateToProps = state => {
+  return state;
+};
+
+export default connect(mapStateToProps, {
+  gotoChapter,
+  loadEbook
+})(EbookWindow);

@@ -126,12 +126,10 @@ class PersistentDrawer extends React.Component {
 
   handleDrawerOpen = () => {
     this.setState({ open: true });
-    this.props.onDrawerTransition();
   };
 
   handleDrawerClose = () => {
     this.setState({ open: false });
-    this.props.onDrawerTransition();
   };
 
   handleChangeAnchor = event => {
