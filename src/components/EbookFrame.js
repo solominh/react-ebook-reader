@@ -17,8 +17,8 @@ const styles = theme => ({
     width: "100%"
   },
   footer: {
-    width: "100%",
-    height: 64
+    width: "100%"
+    // height: 64
   },
   textWrapper: {
     width: "100%",
@@ -29,7 +29,8 @@ const styles = theme => ({
     // maxWidth: 1250,
     "& iframe": {
       border: "none"
-    }
+    },
+    columnGap: "10px!important"
   },
   navWrapper: {
     width: "100%",
@@ -70,6 +71,14 @@ const styles = theme => ({
   },
   arrowRight: {
     marginRight: 50
+  },
+  loadingWrapper: {
+    position: "absolute",
+    width: "100%",
+    height: "100%",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center"
   }
 });
 
@@ -79,7 +88,8 @@ class EbookFrame extends Component {
       classes,
       onBtnPrevClicked,
       onBtnNextClicked,
-      isLoading
+      isLoading,
+      readingProgress
     } = this.props;
     return (
       <div className={classes.wrapper}>
@@ -102,10 +112,14 @@ class EbookFrame extends Component {
             </div>
           </div>
 
-          {isLoading && <BeatLoader color="#26A65B" size="16px" margin="4px" />}
+          {isLoading && (
+            <div className={classes.loadingWrapper}>
+              <BeatLoader color="#26A65B" size="16px" margin="4px" />
+            </div>
+          )}
         </div>
         <div className={classes.footer}>
-          <Footer />
+          <Footer readingProgress={readingProgress}/>
         </div>
       </div>
     );

@@ -4,7 +4,8 @@ import TOCIcon from "material-ui-icons/Menu";
 const styles = theme => ({
   wrapper: {
     display: "flex",
-    alignItems:"center"
+    alignItems: "center",
+    padding: 8
   },
   spacing: {
     flex: 1
@@ -13,12 +14,12 @@ const styles = theme => ({
 
 class Footer extends Component {
   render() {
-    const { classes } = this.props;
+    const { classes, readingProgress } = this.props;
     return (
       <div className={classes.wrapper}>
         <TOCIcon />
-        <div className={classes.spacing}>...</div>
-        <div>{"10%"}</div>
+        <div className={classes.spacing} />
+        <div>{`${readingProgress ? (readingProgress*100).toFixed(2) : "*"}%`}</div>
       </div>
     );
   }

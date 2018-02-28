@@ -2,19 +2,57 @@ import React, { Component } from "react";
 import Drawer from "./Drawer";
 import epubLink from "../res/ebook/dragon-king.epub";
 import EbookFrame from "./EbookFrame";
+import _ from "lodash";
 
 class EbookWindow extends Component {
   state = {
     isLoading: true,
     book: null,
     toc: null,
-    selectedChapter: null
+    selectedChapter: null,
+    readingProgress: null
   };
 
-  componentDidMount() {
-    let book = window.ePub(epubLink);
+  calReadingProgress = book => {
+    let percent = book.pagination.percentageFromCfi(
+      book.getCurrentLocationCfi()
+    );
+    return percent.toFixed(4);
+  };
 
-    book.getMetadata().then(function(meta) {
+  /*this.settings = EPUBJS.core.defaults(options || {}, {
+		bookPath : undefined,
+		bookKey : undefined,
+		packageUrl : undefined,
+		storage: false, //-- true (auto) or false (none) | override: 'ram', 'websqldatabase', 'indexeddb', 'filesystem'
+		fromStorage : false,
+		saved : false,
+		online : true,
+		contained : false,
+		width : undefined,
+		height: undefined,
+		layoutOveride : undefined, // Default: { spread: 'reflowable', layout: 'auto', orientation: 'auto'}
+		orientation : undefined,
+		minSpreadWidth: 768, //-- overridden by spread: none (never) / both (always)
+		gap: "auto", //-- "auto" or int
+		version: 1,
+		restore: false,
+		reload : false,
+		goto : false,
+		styles : {},
+		classes : [],
+		headTags : {},
+		withCredentials: false,
+		render_method: "Iframe",
+		displayLastPage: false
+  });
+  */
+  componentDidMount() {
+    let book = window.ePub(epubLink, {
+      gap: 20
+    });
+
+    book.getMetadata().then(meta => {
       document.title = meta.bookTitle + " – " + meta.creator;
     });
 
@@ -27,6 +65,17 @@ class EbookWindow extends Component {
     book.ready.all
       .then(() => {
         console.log(book);
+        window.book = book;
+
+        // Generate page
+        book.generatePagination().then(toc => {
+          console.log("Pagination generated");
+          this.setState({
+            readingProgress: this.calReadingProgress(book)
+          });
+        });
+
+        // Create TOC index
         book.tocIndexBySpine = book.toc.reduce((prev, cur, index) => {
           prev[cur.spinePos] = index;
           return prev;
@@ -36,10 +85,22 @@ class EbookWindow extends Component {
           selectedChapter: book.tocIndexBySpine[book.currentChapter.spinePos]
         });
 
+        // Update selected chapter
         book.on("renderer:locationChanged", location => {
           this.setState({
-            selectedChapter: book.tocIndexBySpine[book.currentChapter.spinePos]
+            selectedChapter: book.tocIndexBySpine[book.currentChapter.spinePos],
+            readingProgress: this.calReadingProgress(book)
           });
+        });
+
+        // Update pagination
+        book.on("renderer:resized", () => {
+          _.debounce(() => {
+            console.log("asdasdasd");
+            book.generatePagination().then(toc => {
+              console.log("Pagination generated");
+            });
+          }, 1000);
         });
       })
       .catch(err => {
@@ -53,6 +114,7 @@ class EbookWindow extends Component {
     if (this.state.book) {
       const { book } = this.state;
       book.off("renderer:locationChanged");
+      book.off("renderer:resized");
     }
   }
 
@@ -80,7 +142,7 @@ class EbookWindow extends Component {
     // book.gotoCfi(currentPosition);
   };
   render() {
-    const { toc, isLoading, selectedChapter } = this.state;
+    const { toc, isLoading, selectedChapter, readingProgress } = this.state;
     return (
       <Drawer
         toc={toc}
@@ -90,6 +152,7 @@ class EbookWindow extends Component {
       >
         <EbookFrame
           isLoading={isLoading}
+          readingProgress={readingProgress}
           onBtnPrevClicked={this.onBtnPrevClicked}
           onBtnNextClicked={this.onBtnNextClicked}
         />
