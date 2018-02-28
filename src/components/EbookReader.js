@@ -12,7 +12,12 @@ import TOC from "./TOC";
 import { withRouter } from "react-router";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { clickPrevButton, clickNextButton, gotoChapter } from "../actions";
+import {
+  loadEbook,
+  clickPrevButton,
+  clickNextButton,
+  gotoChapter
+} from "../actions";
 
 const TOCWidth = 240;
 
@@ -49,7 +54,7 @@ const styles = theme => ({
   },
   TOCWrapper: {
     width: "100%",
-    flex: 1,
+    flex: 1
     // padding:4
   },
   readingArea: {
@@ -130,13 +135,54 @@ const styles = theme => ({
   bookTitle: {
     fontSize: "1.2rem",
     textAlign: "center",
-    fontWeight:"bold",
-    padding:8,
-    
+    fontWeight: "bold",
+    padding: 8
   }
 });
 
-class EbookFrame extends Component {
+class EbookReader extends Component {
+  /*this.settings = EPUBJS.core.defaults(options || {}, {
+		bookPath : undefined,
+		bookKey : undefined,
+		packageUrl : undefined,
+		storage: false, //-- true (auto) or false (none) | override: 'ram', 'websqldatabase', 'indexeddb', 'filesystem'
+		fromStorage : false,
+		saved : false,
+		online : true,
+		contained : false,
+		width : undefined,
+		height: undefined,
+		layoutOveride : undefined, // Default: { spread: 'reflowable', layout: 'auto', orientation: 'auto'}
+		orientation : undefined,
+		minSpreadWidth: 768, //-- overridden by spread: none (never) / both (always)
+		gap: "auto", //-- "auto" or int
+		version: 1,
+		restore: false,
+		reload : false,
+		goto : false,
+		styles : {},
+		classes : [],
+		headTags : {},
+		withCredentials: false,
+		render_method: "Iframe",
+		displayLastPage: false
+  });
+  */
+  componentDidMount() {
+    this.props.loadEbook(this.props.ebookURL);
+    // if (this.props.ebookURL) {
+    // this.props.loadEbook(this.props.ebookURL);
+    // }
+  }
+
+  componentWillUnmount() {
+    if (this.props.book) {
+      const { book } = this.props;
+      book.off("renderer:locationChanged");
+      book.off("renderer:resized");
+    }
+  }
+
   render() {
     const {
       classes,
@@ -212,7 +258,7 @@ class EbookFrame extends Component {
   }
 }
 
-EbookFrame = withStyles(styles)(EbookFrame);
+EbookReader = withStyles(styles)(EbookReader);
 
 const mapStateToProps = ({
   book,
@@ -231,7 +277,8 @@ const mapStateToProps = ({
 };
 
 export default connect(mapStateToProps, {
+  loadEbook,
   clickPrevButton,
   clickNextButton,
   gotoChapter
-})(EbookFrame);
+})(EbookReader);

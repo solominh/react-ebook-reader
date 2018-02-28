@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import Home from "./Home";
 import About from "./About";
 import OpenEbookWindow from "./OpenEbookWindow";
-import EbookWindow from './EbookWindow';
+import EbookReader from './EbookReader';
 
 const styles={
   wrapper:{
@@ -17,9 +17,9 @@ class App extends Component {
     return (
       <Router>
         <div style={styles.wrapper}>
-          <Route exact path="/" component={EbookWindow} />
+          <Route exact path="/" component={EbookReader} />
           <Route path="/about" component={About} />
-          <Route path="/OpenEbook" component={OpenEbookWindow} />
+          <Route path="/OpenEbook" component={EbookReader} />
         </div>
       </Router>
     );
