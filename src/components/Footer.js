@@ -19,7 +19,7 @@ class Footer extends Component {
       <div className={classes.wrapper}>
         <TOCIcon />
         <div className={classes.spacing} />
-        <div>{`${readingProgress ? (readingProgress*100).toFixed(2) : "*"}%`}</div>
+        <div>{`${readingProgress ? readingProgress.toFixed(2) : 0} %`}</div>
       </div>
     );
   }

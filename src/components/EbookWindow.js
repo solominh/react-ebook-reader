@@ -17,7 +17,7 @@ class EbookWindow extends Component {
     let percent = book.pagination.percentageFromCfi(
       book.getCurrentLocationCfi()
     );
-    return percent.toFixed(4);
+    return percent ? percent * 100 : null;
   };
 
   /*this.settings = EPUBJS.core.defaults(options || {}, {
@@ -141,6 +141,15 @@ class EbookWindow extends Component {
     // var currentPosition = book.getCurrentLocationCfi();
     // book.gotoCfi(currentPosition);
   };
+
+  onSliderChange = value => {
+    this.setState({ readingProgress: value });
+  };
+
+  onSliderAfterChange = value => {
+    const {book} = this.state
+    book.gotoPercentage(value / 100);
+  };
   render() {
     const { toc, isLoading, selectedChapter, readingProgress } = this.state;
     return (
@@ -155,6 +164,8 @@ class EbookWindow extends Component {
           readingProgress={readingProgress}
           onBtnPrevClicked={this.onBtnPrevClicked}
           onBtnNextClicked={this.onBtnNextClicked}
+          onSliderChange={this.onSliderChange}
+          onSliderAfterChange={this.onSliderAfterChange}
         />
       </Drawer>
     );

@@ -1,8 +1,10 @@
 import React, { Component } from "react";
 import { BeatLoader } from "halogenium";
 import { withStyles } from "material-ui/styles";
+import { CircularProgress } from "material-ui/Progress";
 import cn from "classnames";
 import Footer from "./Footer";
+import ReadingProgressSlider from "./ReadingProgressSlider";
 
 const styles = theme => ({
   wrapper: {
@@ -19,6 +21,12 @@ const styles = theme => ({
   footer: {
     width: "100%"
     // height: 64
+  },
+  slider: {
+    width: "100%",
+    padding:"20px 20px 20px 20px",
+    backgroundColor:"#EEEEEE",
+    borderTop:"1px solid #616161"
   },
   textWrapper: {
     width: "100%",
@@ -89,7 +97,9 @@ class EbookFrame extends Component {
       onBtnPrevClicked,
       onBtnNextClicked,
       isLoading,
-      readingProgress
+      readingProgress,
+      onSliderChange,
+      onSliderAfterChange
     } = this.props;
     return (
       <div className={classes.wrapper}>
@@ -115,11 +125,19 @@ class EbookFrame extends Component {
           {isLoading && (
             <div className={classes.loadingWrapper}>
               <BeatLoader color="#26A65B" size="16px" margin="4px" />
+              {/* <CircularProgress/> */}
             </div>
           )}
         </div>
         <div className={classes.footer}>
-          <Footer readingProgress={readingProgress}/>
+          <Footer readingProgress={readingProgress} />
+        </div>
+        <div className={classes.slider}>
+          <ReadingProgressSlider
+            readingProgress={readingProgress}
+            onChange={onSliderChange}
+            onAfterChange={onSliderAfterChange}
+          />
         </div>
       </div>
     );

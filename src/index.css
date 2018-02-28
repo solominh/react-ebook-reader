@@ -17,3 +17,8 @@ body, html, #root {
 * {
   box-sizing: border-box;
 }
+
+
+.rc-slider-handle:active{
+  box-shadow: 0 0 5px #E0E0E0!important;
+}
