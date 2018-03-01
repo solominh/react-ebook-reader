@@ -4,13 +4,14 @@ import { combineReducers } from "redux";
 const initialState = {
   isLoading: true,
   book: null,
+  bookPath: null,
   currentChapterIndex: null,
   readingProgress: null,
   isReadingProgressSliderOpen: true,
   isTOCOpen: false
 };
 
-export default function(state = initialState, action) {
+export default function (state = initialState, action) {
   switch (action.type) {
     case types.CLICK_READING_PROGRESS: {
       return {
@@ -62,6 +63,12 @@ export default function(state = initialState, action) {
         readingProgress: action.readingProgress,
         currentChapterIndex: action.currentChapterIndex
       };
+    }
+    case types.SELECT_EBOOK: {
+      return {
+        ...state,
+        bookPath: action.bookPath
+      }
     }
   }
   return state;

@@ -1,6 +1,8 @@
 import * as types from "./actionTypes";
 import epubLink from "../res/ebook/dragon-king.epub";
+// import epubLink from '../res/ebook/Đấu La Đại Lục II - Đường Gia Tam Thiếu.epub';
 import _ from "lodash";
+import axios from "axios";
 
 export const clickPrevButton = () => {
   return (dispatch, getState) => {
@@ -21,7 +23,7 @@ export const clickReadingProgress = () => ({
 });
 
 export const toggleTOC = () => ({
-  type: types.TOGGLE_TOC,
+  type: types.TOGGLE_TOC
 });
 
 export const changeReadingProgress = value => ({
@@ -53,15 +55,55 @@ const calReadingProgress = book => {
   return percent ? percent * 100 : null;
 };
 
-export const loadEbook = (url = epubLink) => {
+const getBufferFromFile = fileObj => {
+  if (!fileObj) return Promise.reject();
+
+  return new Promise((resolve, reject) => {
+    var reader = new FileReader();
+    reader.addEventListener(
+      "load",
+      function () {
+        var arr = new Uint8Array(reader.result).subarray(0, 2);
+        var header = "";
+        for (var i = 0; i < arr.length; i++) {
+          header += arr[i].toString(16);
+        }
+        console.log(header);
+        if (header == "504b") {
+          resolve(reader.result);
+        } else {
+          reject(
+            "The file you chose is not a valid ePub ebook. Please try choosing a new file."
+          );
+        }
+      },
+      false
+    );
+    reader.readAsArrayBuffer(fileObj);
+  });
+};
+
+export const selectEbook = (bookPath) => ({
+  type: types.SELECT_EBOOK,
+  bookPath,
+})
+
+const book = window.ePub();
+
+// url = "https://s3.amazonaws.com/moby-dick/"
+// url="https://rawgit.com/solominh/react-ebook-reader/master/src/res/ebook/dragon-king.epub"
+export const loadEbook = (bookPath) => {
   return async (dispatch, getState) => {
     dispatch({
       type: types.LOADING_EBOOK_REQUESTED
     });
 
-    let book = window.ePub(url, {
-      gap: 20
-    });
+    if (!(typeof bookPath === "string")) {
+      bookPath = await getBufferFromFile(bookPath)
+    }
+
+    console.log(bookPath);
+    book.open(bookPath)
 
     book.getMetadata().then(meta => {
       document.title = meta.bookTitle + " – " + meta.creator;
@@ -96,10 +138,11 @@ export const loadEbook = (url = epubLink) => {
       // Update selected chapter
       book.on("renderer:locationChanged", location => {
         dispatch({
-          type:types.RENDERER_LOCATION_CHANGED,
-          readingProgress:calReadingProgress(book),
-          currentChapterIndex:book.tocIndexBySpine[book.currentChapter.spinePos]
-        })
+          type: types.RENDERER_LOCATION_CHANGED,
+          readingProgress: calReadingProgress(book),
+          currentChapterIndex:
+            book.tocIndexBySpine[book.currentChapter.spinePos]
+        });
       });
 
       // Update pagination

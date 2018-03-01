@@ -60,7 +60,8 @@ const styles = theme => ({
   readingArea: {
     position: "relative",
     flex: 1,
-    width: "100%"
+    width: "90%",
+    margin:"0 auto"
   },
   footer: {
     width: "100%"
@@ -169,10 +170,11 @@ class EbookReader extends Component {
   });
   */
   componentDidMount() {
-    this.props.loadEbook(this.props.ebookURL);
+    // this.props.loadEbook(this.props.ebookURL);
     // if (this.props.ebookURL) {
     // this.props.loadEbook(this.props.ebookURL);
     // }
+    this.props.loadEbook(this.props.bookPath)
   }
 
   componentWillUnmount() {
@@ -262,6 +264,7 @@ EbookReader = withStyles(styles)(EbookReader);
 
 const mapStateToProps = ({
   book,
+  bookPath,
   currentChapterIndex,
   isLoading,
   isReadingProgressSliderOpen,
@@ -269,6 +272,7 @@ const mapStateToProps = ({
 }) => {
   return {
     book,
+    bookPath,
     currentChapterIndex,
     isLoading,
     isReadingProgressSliderOpen,
