@@ -18,6 +18,7 @@ import {
   clickNextButton,
   gotoChapter
 } from "../actions";
+import MoreView from "./MoreView";
 
 const TOCWidth = 240;
 
@@ -61,13 +62,19 @@ const styles = theme => ({
     position: "relative",
     flex: 1,
     width: "100%",
-    margin:"0 auto"
+    margin: "0 auto"
   },
   footer: {
     width: "100%"
     // height: 64
   },
   slider: {
+    width: "100%",
+    padding: "20px 20px 20px 20px",
+    backgroundColor: "#EEEEEE",
+    borderTop: "1px solid #616161"
+  },
+  moreView: {
     width: "100%",
     padding: "20px 20px 20px 20px",
     backgroundColor: "#EEEEEE",
@@ -185,10 +192,10 @@ class EbookReader extends Component {
     }
   }
 
-  onKeyDown=(e)=>{
-    if(e.key ==="ArrowLeft"){
+  onKeyDown = (e) => {
+    if (e.key === "ArrowLeft") {
       this.props.clickPrevButton()
-    }else if(e.key ==="ArrowRight"){
+    } else if (e.key === "ArrowRight") {
       this.props.clickNextButton()
     }
   }
@@ -200,6 +207,7 @@ class EbookReader extends Component {
       currentChapterIndex,
       isLoading,
       isReadingProgressSliderOpen,
+      isMoreViewOpen,
       isTOCOpen,
       clickPrevButton,
       clickNextButton,
@@ -264,6 +272,11 @@ class EbookReader extends Component {
               <ReadingProgressSlider />
             </div>
           </Collapse>
+          <Collapse in={isMoreViewOpen}>
+            <div className={classes.moreView}>
+              <MoreView />
+            </div>
+          </Collapse>
         </div>
       </div>
     );
@@ -278,6 +291,7 @@ const mapStateToProps = ({
   currentChapterIndex,
   isLoading,
   isReadingProgressSliderOpen,
+  isMoreViewOpen,
   isTOCOpen
 }) => {
   return {
@@ -286,6 +300,7 @@ const mapStateToProps = ({
     currentChapterIndex,
     isLoading,
     isReadingProgressSliderOpen,
+    isMoreViewOpen,
     isTOCOpen
   };
 };

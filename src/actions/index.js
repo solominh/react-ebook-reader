@@ -26,6 +26,10 @@ export const toggleTOC = () => ({
   type: types.TOGGLE_TOC
 });
 
+export const toggleMoreView = () => ({
+  type: types.TOGGLE_MORE_VIEW
+});
+
 export const changeReadingProgress = value => ({
   type: types.CHANGE_READING_PROGRESS,
   readingProgress: value

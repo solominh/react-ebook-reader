@@ -8,6 +8,7 @@ const initialState = {
   currentChapterIndex: null,
   readingProgress: null,
   isReadingProgressSliderOpen: false,
+  isMoreViewOpen:true,
   isTOCOpen: false
 };
 
@@ -55,6 +56,12 @@ export default function (state = initialState, action) {
       return {
         ...state,
         isTOCOpen: !state.isTOCOpen
+      };
+    }
+    case types.TOGGLE_MORE_VIEW: {
+      return {
+        ...state,
+        isMoreViewOpen: !state.isMoreViewOpen
       };
     }
     case types.RENDERER_LOCATION_CHANGED: {

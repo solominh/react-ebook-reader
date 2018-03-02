@@ -1,12 +1,13 @@
 import React, { Component } from "react";
 import { withStyles } from "material-ui/styles";
 import TOCIcon from "material-ui-icons/Menu";
+import MoreIcon from "material-ui-icons/MoreHoriz";
 import IconButton from "material-ui/IconButton";
 
 import { withRouter } from "react-router";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { clickReadingProgress, toggleTOC } from "../actions";
+import { clickReadingProgress, toggleTOC, toggleMoreView } from "../actions";
 
 const styles = theme => ({
   wrapper: {
@@ -14,11 +15,17 @@ const styles = theme => ({
     alignItems: "center",
     // padding: 8
   },
-  spacing: {
-    flex: 1
+  moreMenu: {
+    flex: 1,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center"
   },
   readingProgress: {
-    fontSize:"1rem",
+    flex: 1,
+    fontSize: "0.7rem!important",
+    display: "flex",
+    justifyContent: "flex-end"
   }
 });
 
@@ -28,21 +35,29 @@ class Footer extends Component {
       classes,
       readingProgress,
       clickReadingProgress,
-      toggleTOC
+      toggleTOC,
+      toggleMoreView
     } = this.props;
     return (
       <div className={classes.wrapper}>
-        <IconButton aria-label="Open TOC" onClick={toggleTOC} >
-          <TOCIcon />
-        </IconButton>
-        <div className={classes.spacing} />
-
-        <IconButton aria-label="Open TOC" style={{width:"80px"}} onClick={clickReadingProgress}>
-          <div className={classes.readingProgress}>{`${
-            readingProgress ? readingProgress.toFixed(2) : 0
-          } %`}</div>
-        </IconButton>
-      </div>
+        <div style={{ flex: 1 }}>
+          <IconButton aria-label="Open TOC" style={{ flex: 1 }} onClick={toggleTOC} >
+            <TOCIcon />
+          </IconButton>
+        </div>
+        <div className={classes.moreMenu} >
+          <IconButton aria-label="Open more menu" onClick={toggleMoreView} >
+            <MoreIcon />
+          </IconButton>
+        </div>
+        <div className={classes.readingProgress}>
+          <IconButton aria-label="Open reading progress slider"
+            style={{ width: "80px" }}
+            onClick={clickReadingProgress}>
+            <span style={{ fontSize: "0.8rem" }}>{`${readingProgress ? readingProgress.toFixed(2) : 0} %`} </span>
+          </IconButton >
+        </div >
+      </div >
     );
   }
 }
@@ -55,5 +70,6 @@ const mapStateToProps = ({ readingProgress }) => {
 
 export default connect(mapStateToProps, {
   clickReadingProgress,
-  toggleTOC
+  toggleTOC,
+  toggleMoreView
 })(Footer);
