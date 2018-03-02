@@ -7,7 +7,6 @@ import Footer from "./Footer";
 import ReadingProgressSlider from "./ReadingProgressSlider";
 import Collapse from "material-ui/transitions/Collapse";
 import Slide from "material-ui/transitions/Slide";
-import TOC from "./TOC";
 
 import { withRouter } from "react-router";
 import { connect } from "react-redux";
@@ -19,10 +18,9 @@ import {
   gotoChapter
 } from "../actions";
 import MoreView from "./MoreView";
-import Settings from "./Settings";
-import BookInfo from "./BookInfo";
+import Sidebar from "./Sidebar";
 
-const TOCWidth = 240;
+const sidebarWidth = 240;
 
 const styles = theme => ({
   wrapper: {
@@ -37,28 +35,21 @@ const styles = theme => ({
     flexDirection: "column",
     flex: 1
   },
-  TOCSidebar: {
-    width: TOCWidth,
+  sidebar: {
+    width: sidebarWidth,
     height: "100%",
     visibility: "hidden",
-    marginLeft: -TOCWidth,
+    marginLeft: -sidebarWidth,
     backgroundColor: "#F5F5F5",
     borderRight: "1px solid #BDBDBD",
     transition: theme.transitions.create(["margin"], {
       easing: theme.transitions.easing.easeOut,
       duration: theme.transitions.duration.enteringScreen
     }),
-    display: "flex",
-    flexDirection: "column"
   },
-  TOCSidebarOpen: {
+  sidebarOpen: {
     visibility: "visible",
     marginLeft: 0
-  },
-  TOCWrapper: {
-    width: "100%",
-    flex: 1
-    // padding:4
   },
   readingArea: {
     position: "relative",
@@ -146,12 +137,7 @@ const styles = theme => ({
     alignItems: "center",
     justifyContent: "center"
   },
-  bookTitle: {
-    fontSize: "1.2rem",
-    textAlign: "center",
-    fontWeight: "bold",
-    padding: 8
-  }
+ 
 });
 
 class EbookReader extends Component {
@@ -217,34 +203,21 @@ class EbookReader extends Component {
       isReadingProgressSliderOpen,
       isMoreViewOpen,
       isTOCOpen,
+      isBookInfoOpen,
+      isSettingsOpen,
+      isSearchOpen,
       clickPrevButton,
       clickNextButton,
       gotoChapter
     } = this.props;
 
-    const toc = book ? book.toc : null;
-
     return (
       <div className={classes.wrapper}
-        onKeyDown={this.onKeyDown}
+      // onKeyDown={this.onKeyDown}
       >
-        <div
-          className={cn(classes.TOCSidebar, {
-            [classes.TOCSidebarOpen]: isTOCOpen
-          })}
-        >
-          <div className={classes.bookTitle}>
-            {book ? book.metadata.bookTitle : ""}
-          </div>
-          <div className={classes.TOCWrapper}>
-            {/* <TOC
-              data={toc}
-              selectedItem={currentChapterIndex}
-              onItemSelected={gotoChapter}
-            /> */}
-            <Settings />
-            {/* <BookInfo/> */}
-          </div>
+
+        <div className={cn(classes.sidebar, { [classes.sidebarOpen]: isTOCOpen || isBookInfoOpen || isSettingsOpen || isSearchOpen })}>
+          <Sidebar />
         </div>
 
         <div className={classes.contentWrapper} id="contentWrapper">
@@ -304,7 +277,10 @@ const mapStateToProps = ({
   isLoading,
   isReadingProgressSliderOpen,
   isMoreViewOpen,
-  isTOCOpen
+  isTOCOpen,
+  isBookInfoOpen,
+  isSettingsOpen,
+  isSearchOpen
 }) => {
   return {
     book,
@@ -313,7 +289,10 @@ const mapStateToProps = ({
     isLoading,
     isReadingProgressSliderOpen,
     isMoreViewOpen,
-    isTOCOpen
+    isTOCOpen,
+    isBookInfoOpen,
+    isSettingsOpen,
+    isSearchOpen
   };
 };
 

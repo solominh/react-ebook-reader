@@ -11,7 +11,10 @@ const initialState = {
   readingProgress: null,
   isReadingProgressSliderOpen: false,
   isMoreViewOpen: true,
-  isTOCOpen: false
+  isTOCOpen: false,
+  isBookInfoOpen: false,
+  isSettingsOpen: false,
+  isSearchOpen: false
 };
 
 export default function (state = initialState, action) {
@@ -59,8 +62,38 @@ export default function (state = initialState, action) {
     case types.TOGGLE_TOC: {
       return {
         ...state,
-        isTOCOpen: !state.isTOCOpen
+        isTOCOpen: !state.isTOCOpen,
+        isBookInfoOpen: false,
+        isSettingsOpen: false,
+        isSearchOpen: false,
       };
+    }
+    case types.OPEN_BOOK_INFO: {
+      return {
+        ...state,
+        isTOCOpen: false,
+        isBookInfoOpen: !state.isBookInfoOpen,
+        isSettingsOpen: false,
+        isSearchOpen: false,
+      }
+    }
+    case types.OPEN_SETTINGS: {
+      return {
+        ...state,
+        isTOCOpen: false,
+        isBookInfoOpen: false,
+        isSettingsOpen: !state.isSettingsOpen,
+        isSearchOpen: false,
+      }
+    }
+    case types.OPEN_SEARCH: {
+      return {
+        ...state,
+        isTOCOpen: false,
+        isBookInfoOpen: false,
+        isSettingsOpen: false,
+        isSearchOpen: !state.isSearchOpen,
+      }
     }
     case types.TOGGLE_MORE_VIEW: {
       return {

@@ -28,6 +28,18 @@ export const toggleTOC = () => ({
   type: types.TOGGLE_TOC
 });
 
+export const openBookInfo=()=>({
+  type: types.OPEN_BOOK_INFO
+})
+
+export const openSettings=()=>({
+  type: types.OPEN_SETTINGS
+})
+
+export const openSearch=()=>({
+  type: types.OPEN_SEARCH
+})
+
 export const toggleMoreView = () => ({
   type: types.TOGGLE_MORE_VIEW
 });
@@ -223,7 +235,7 @@ export const loadEbook = (bookPath, renderArea) => {
         const readingProgress = calReadingProgress(book);
 
         // Cache reading progress
-        const key = `book_${bookID}_curPosCfi`;
+        const key = `ePubViewer_${bookID}_curPosCfi`;
         localforage.setItem(key, book.getCurrentLocationCfi())
 
         dispatch({
@@ -252,7 +264,7 @@ export const loadEbook = (bookPath, renderArea) => {
       });
 
       // Goto cached cfi
-      const key = `book_${bookID}_curPosCfi`;
+      const key = `ePubViewer_${bookID}_curPosCfi`;
       const cachedCurPosCfi = await localforage.getItem(key)
       if (cachedCurPosCfi) book.gotoCfi(cachedCurPosCfi)
 

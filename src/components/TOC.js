@@ -99,7 +99,7 @@ class TOC extends Component {
         {({ width, height }) => {
           if (mostRecentWidth && mostRecentWidth !== width) {
             cache.clearAll();
-            list.recomputeRowHeights();
+            if (list) list.recomputeRowHeights();
           }
 
           mostRecentWidth = width;

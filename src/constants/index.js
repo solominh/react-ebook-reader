@@ -1,6 +1,6 @@
 
 export const APP_VERSION = 1.0;
-export const SETTINGS_KEY = "SETTINGS" + "_" + APP_VERSION
+export const SETTINGS_KEY = "ePubViewer_settings_" + APP_VERSION
 export const settingOptions = {
   themes: {
     "SepiaLight": {
