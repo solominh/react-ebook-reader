@@ -68,7 +68,7 @@ export default function (state = initialState, action) {
         isSearchOpen: false,
       };
     }
-    case types.OPEN_BOOK_INFO: {
+    case types.TOGGLE_BOOK_INFO: {
       return {
         ...state,
         isTOCOpen: false,
@@ -77,7 +77,7 @@ export default function (state = initialState, action) {
         isSearchOpen: false,
       }
     }
-    case types.OPEN_SETTINGS: {
+    case types.TOGGLE_SETTINGS: {
       return {
         ...state,
         isTOCOpen: false,
@@ -86,7 +86,7 @@ export default function (state = initialState, action) {
         isSearchOpen: false,
       }
     }
-    case types.OPEN_SEARCH: {
+    case types.TOGGLE_SEARCH: {
       return {
         ...state,
         isTOCOpen: false,

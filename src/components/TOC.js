@@ -27,6 +27,9 @@ const styles = {
       boxSizing: "border-box",
       "&:hover": {
         backgroundColor: "#eee"
+      },
+      "&:active": {
+        backgroundColor: "#B0BEC5"
       }
     },
     "& .selected": {

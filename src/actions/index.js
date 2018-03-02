@@ -28,16 +28,16 @@ export const toggleTOC = () => ({
   type: types.TOGGLE_TOC
 });
 
-export const openBookInfo=()=>({
-  type: types.OPEN_BOOK_INFO
+export const toggleBookInfo=()=>({
+  type: types.TOGGLE_BOOK_INFO
 })
 
-export const openSettings=()=>({
-  type: types.OPEN_SETTINGS
+export const toggleSettings=()=>({
+  type: types.TOGGLE_SETTINGS
 })
 
-export const openSearch=()=>({
-  type: types.OPEN_SEARCH
+export const toggleSearch=()=>({
+  type: types.TOGGLE_SEARCH
 })
 
 export const toggleMoreView = () => ({

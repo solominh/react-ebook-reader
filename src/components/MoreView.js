@@ -10,7 +10,7 @@ import IconButton from "material-ui/IconButton";
 import { withRouter } from "react-router";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { selectEbook, openBookInfo, openSettings, openSearch } from "../actions";
+import { selectEbook, toggleBookInfo, toggleSettings, toggleSearch } from "../actions";
 
 import Dropzone from "react-dropzone";
 
@@ -36,16 +36,16 @@ class MoreView extends Component {
   }
 
   render() {
-    const { classes, openBookInfo, openSettings, openSearch } = this.props
+    const { classes, toggleBookInfo, toggleSettings, toggleSearch } = this.props
     return (
       <div>
-        <IconButton onClick={openBookInfo}>
+        <IconButton onClick={toggleBookInfo}>
           <InfoIcon />
         </IconButton>
-        <IconButton onClick={openSearch}>
+        <IconButton onClick={toggleSearch}>
           <SearchIcon />
         </IconButton>
-        <IconButton onClick={openSettings}>
+        <IconButton onClick={toggleSettings}>
           <SettingsIcon />
         </IconButton>
 
@@ -72,7 +72,7 @@ const mapStateToProps = ({ readingProgress }) => {
 
 export default connect(mapStateToProps, {
   selectEbook,
-  openBookInfo,
-  openSettings,
-  openSearch
+  toggleBookInfo,
+  toggleSettings,
+  toggleSearch
 })(MoreView);
