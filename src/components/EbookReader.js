@@ -22,7 +22,7 @@ import MoreView from "./MoreView";
 import Settings from "./Settings";
 import BookInfo from "./BookInfo";
 
-const TOCWidth = 300;
+const TOCWidth = 240;
 
 const styles = theme => ({
   wrapper: {
@@ -238,8 +238,8 @@ class EbookReader extends Component {
               selectedItem={currentChapterIndex}
               onItemSelected={gotoChapter}
             /> */}
-            {/* <Settings/> */}
-            <BookInfo/>
+            <Settings/>
+            {/* <BookInfo/> */}
           </div>
         </div>
 

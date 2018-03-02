@@ -2,12 +2,13 @@ import React, { Component } from 'react';
 import Input, { InputLabel } from 'material-ui/Input';
 import { FormControl, FormHelperText } from 'material-ui/Form';
 import Select from 'material-ui/Select';
+import Button from 'material-ui/Button';
 
 import { withStyles } from 'material-ui/styles';
 import { withRouter } from "react-router";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { updateSettings } from "../actions";
+import { updateSettings, resetSettings } from "../actions";
 
 import { settingOptions } from '../constants';
 
@@ -20,7 +21,7 @@ const styles = theme => ({
   },
   inputLabel: {
     fontWeight: "bold",
-    flex:1
+    flex: 1
   },
   select: {
     flex: 2
@@ -41,7 +42,7 @@ class Settings extends Component {
   }
 
   render() {
-    const { classes, settings, updateSettings } = this.props
+    const { classes, settings, updateSettings, resetSettings } = this.props
     const { fonts, themes, lineHeights, margins, fontSizes } = settingOptions;
 
     return (
@@ -140,6 +141,9 @@ class Settings extends Component {
             })}
           </Select>
         </div>
+        <Button color="primary" onClick={resetSettings}>
+          Reset settings
+        </Button>
       </div>
     );
   }
@@ -152,5 +156,6 @@ const mapStateToProps = ({ settings }) => {
 };
 
 export default connect(mapStateToProps, {
-  updateSettings
+  updateSettings,
+  resetSettings
 })(Settings);

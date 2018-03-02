@@ -2,7 +2,9 @@ import * as types from "./actionTypes";
 import epubLink from "../res/ebook/dragon-king.epub";
 // import epubLink from '../res/ebook/Đấu La Đại Lục II - Đường Gia Tam Thiếu.epub';
 import _ from "lodash";
-import axios from "axios";
+// import axios from "axios";
+import localforage from 'localforage';
+import { SETTINGS_KEY, defaultSettings } from '../constants';
 
 export const clickPrevButton = () => {
   return (dispatch, getState) => {
@@ -246,18 +248,15 @@ export const loadEbook = (bookPath, renderArea) => {
 
 
 export const loadSettings = () => {
-  return (dispatch, getState) => {
+  return async (dispatch, getState) => {
     dispatch({
       type: types.LOADING_SETTINGS_REQUESTED
     });
 
     try {
-      const settings = {
-        "theme": "White",
-        "font": "OpenSans",
-        "line-height": "1.5",
-        "font-size": "11",
-        "margin": "5"
+      let settings = await localforage.getItem(SETTINGS_KEY)
+      if (!settings) {
+        settings = defaultSettings;
       }
       dispatch({
         type: types.LOADING_SETTINGS_SUCCEEDED,
@@ -272,10 +271,29 @@ export const loadSettings = () => {
 }
 
 export const updateSettings = (settings) => {
-  return (dispatch, getState) => {
+  return async (dispatch, getState) => {
     dispatch({
       type: types.LOADING_SETTINGS_SUCCEEDED,
       settings,
     })
+    try {
+      await localforage.setItem(SETTINGS_KEY, settings)
+    } catch (err) {
+      console.log(err);
+    }
+  }
+}
+
+export const resetSettings = () => {
+  return async (dispatch, getState) => {
+    dispatch({
+      type: types.LOADING_SETTINGS_SUCCEEDED,
+      settings: defaultSettings,
+    })
+    try {
+      await localforage.setItem(SETTINGS_KEY, defaultSettings)
+    } catch (err) {
+      console.log(err);
+    }
   }
 }
