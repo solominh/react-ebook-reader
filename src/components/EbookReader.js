@@ -60,7 +60,7 @@ const styles = theme => ({
   readingArea: {
     position: "relative",
     flex: 1,
-    width: "90%",
+    width: "100%",
     margin:"0 auto"
   },
   footer: {
@@ -74,11 +74,11 @@ const styles = theme => ({
     borderTop: "1px solid #616161"
   },
   textWrapper: {
-    width: "100%",
+    width: "90%",
     height: "100%",
     position: "absolute",
     padding: 20,
-    margin: "0px auto",
+    margin: "0px 5%",
     // maxWidth: 1250,
     "& iframe": {
       border: "none"
@@ -185,6 +185,14 @@ class EbookReader extends Component {
     }
   }
 
+  onKeyDown=(e)=>{
+    if(e.key ==="ArrowLeft"){
+      this.props.clickPrevButton()
+    }else if(e.key ==="ArrowRight"){
+      this.props.clickNextButton()
+    }
+  }
+
   render() {
     const {
       classes,
@@ -201,7 +209,9 @@ class EbookReader extends Component {
     const toc = book ? book.toc : null;
 
     return (
-      <div className={classes.wrapper}>
+      <div className={classes.wrapper}
+        onKeyDown={this.onKeyDown}
+      >
         <div
           className={cn(classes.TOCSidebar, {
             [classes.TOCSidebarOpen]: isTOCOpen

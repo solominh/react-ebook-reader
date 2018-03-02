@@ -7,7 +7,7 @@ const initialState = {
   bookPath: null,
   currentChapterIndex: null,
   readingProgress: null,
-  isReadingProgressSliderOpen: true,
+  isReadingProgressSliderOpen: false,
   isTOCOpen: false
 };
 

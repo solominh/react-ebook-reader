@@ -5889,6 +5889,7 @@ EPUBJS.Layout.ReflowableSpreads.prototype.format = function(documentElement, _wi
 	var columnGap = EPUBJS.core.prefixed('columnGap');
 	var columnWidth = EPUBJS.core.prefixed('columnWidth');
 	var columnFill = EPUBJS.core.prefixed('columnFill');
+	var columnRule = EPUBJS.core.prefixed('columnRule');
 
 	var divisor = 2,
 			cutoff = 800;
@@ -5920,6 +5921,7 @@ EPUBJS.Layout.ReflowableSpreads.prototype.format = function(documentElement, _wi
 	documentElement.style[columnFill] = "auto";
 	documentElement.style[columnGap] = gap+"px";
 	documentElement.style[columnWidth] = colWidth+"px";
+	documentElement.style[columnRule] = "1px inset rgba(0,0,0,0.05)";
 
 	this.colWidth = colWidth;
 	this.gap = gap;
