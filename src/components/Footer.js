@@ -1,9 +1,9 @@
 import React, { Component } from "react";
-import { withStyles } from "material-ui/styles";
 import TOCIcon from "material-ui-icons/Menu";
 import MoreIcon from "material-ui-icons/MoreHoriz";
 import IconButton from "material-ui/IconButton";
 
+import { withStyles } from "material-ui/styles";
 import { withRouter } from "react-router";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";

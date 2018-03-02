@@ -233,3 +233,39 @@ export const loadEbook = (bookPath, renderArea) => {
     }
   };
 };
+
+
+export const loadSettings = () => {
+  return (dispatch, getState) => {
+    dispatch({
+      type: types.LOADING_SETTINGS_REQUESTED
+    });
+
+    try {
+      const settings = {
+        "theme": "White",
+        "font": "OpenSans",
+        "line-height": "1.5",
+        "font-size": "11",
+        "margin": "5"
+      }
+      dispatch({
+        type: types.LOADING_SETTINGS_SUCCEEDED,
+        settings,
+      })
+    } catch (err) {
+      dispatch({
+        type: types.LOADING_SETTINGS_FAILED
+      });
+    }
+  }
+}
+
+export const updateSettings = (settings) => {
+  return (dispatch, getState) => {
+    dispatch({
+      type: types.LOADING_SETTINGS_SUCCEEDED,
+      settings,
+    })
+  }
+}

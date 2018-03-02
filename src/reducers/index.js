@@ -2,13 +2,14 @@ import * as types from "../actions/actionTypes";
 import { combineReducers } from "redux";
 
 const initialState = {
+  settings: null,
   isLoading: true,
   book: null,
   bookPath: null,
   currentChapterIndex: null,
   readingProgress: null,
   isReadingProgressSliderOpen: false,
-  isMoreViewOpen:true,
+  isMoreViewOpen: true,
   isTOCOpen: false
 };
 
@@ -75,6 +76,13 @@ export default function (state = initialState, action) {
       return {
         ...state,
         bookPath: action.bookPath
+      }
+    }
+
+    case types.LOADING_SETTINGS_SUCCEEDED: {
+      return {
+        ...state,
+        settings: action.settings
       }
     }
   }

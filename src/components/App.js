@@ -5,6 +5,12 @@ import About from "./About";
 import AddEbookView from "./AddEbookView";
 import EbookReader from "./EbookReader";
 
+import { withStyles } from "material-ui/styles";
+import { withRouter } from "react-router";
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+import { loadSettings } from "../actions";
+
 const styles = {
   wrapper: {
     width: "100%",
@@ -13,6 +19,11 @@ const styles = {
 };
 
 class App extends Component {
+
+  componentWillMount() {
+    this.props.loadSettings();
+  }
+
   render() {
     return (
       <div style={styles.wrapper}>
@@ -24,4 +35,9 @@ class App extends Component {
   }
 }
 
-export default App;
+
+App = withStyles(styles)(App);
+
+export default connect(null, {
+  loadSettings
+})(App);

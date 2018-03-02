@@ -19,8 +19,9 @@ import {
   gotoChapter
 } from "../actions";
 import MoreView from "./MoreView";
+import Settings from "./Settings";
 
-const TOCWidth = 240;
+const TOCWidth = 300;
 
 const styles = theme => ({
   wrapper: {
@@ -231,11 +232,12 @@ class EbookReader extends Component {
             {book ? book.metadata.bookTitle : ""}
           </div>
           <div className={classes.TOCWrapper}>
-            <TOC
+            {/* <TOC
               data={toc}
               selectedItem={currentChapterIndex}
               onItemSelected={gotoChapter}
-            />
+            /> */}
+            <Settings/>
           </div>
         </div>
 
