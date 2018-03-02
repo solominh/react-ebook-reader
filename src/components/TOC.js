@@ -118,6 +118,7 @@ class TOC extends Component {
               rowHeight={cache.rowHeight}
               rowRenderer={this.rowRenderer}
               selectedRow={selectedItem}
+              scrollToIndex={selectedItem}
             />
           );
         }}
