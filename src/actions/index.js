@@ -9,6 +9,9 @@ import { SETTINGS_KEY, defaultSettings, settingOptions } from '../constants';
 export const clickPrevButton = () => {
   return (dispatch, getState) => {
     const { book } = getState();
+    dispatch({
+      type: types.GOTO_PREV_PAGE
+    })
     book.prevPage();
   };
 };
@@ -16,6 +19,9 @@ export const clickPrevButton = () => {
 export const clickNextButton = () => {
   return (dispatch, getState) => {
     const { book } = getState();
+    dispatch({
+      type: types.GOTO_NEXT_PAGE
+    })
     book.nextPage();
   };
 };

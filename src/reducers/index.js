@@ -130,6 +130,15 @@ export default function (state = initialState, action) {
         settings: action.settings
       }
     }
+
+    case types.GOTO_PREV_PAGE:
+    case types.GOTO_NEXT_PAGE: {
+      return {
+        ...state,
+        isReadingProgressSliderOpen: false,
+        isMoreViewOpen: false,
+      }
+    }
   }
   return state;
 }
