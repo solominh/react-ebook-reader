@@ -26,7 +26,10 @@ const styles = theme => ({
     fontSize: "0.7rem!important",
     display: "flex",
     justifyContent: "flex-end"
-  }
+  },
+  button: {
+    color: "inherit"
+  },
 });
 
 class Footer extends Component {
@@ -41,17 +44,17 @@ class Footer extends Component {
     return (
       <div className={classes.wrapper}>
         <div style={{ flex: 1 }}>
-          <IconButton aria-label="Open TOC" style={{ flex: 1 }} onClick={toggleTOC} >
+          <IconButton className={classes.button} aria-label="Open TOC" style={{ flex: 1 }} onClick={toggleTOC} >
             <TOCIcon />
           </IconButton>
         </div>
         <div className={classes.moreMenu} >
-          <IconButton aria-label="Open more menu" onClick={toggleMoreView} >
+          <IconButton className={classes.button} aria-label="Open more menu" onClick={toggleMoreView} >
             <MoreIcon />
           </IconButton>
         </div>
         <div className={classes.readingProgress}>
-          <IconButton aria-label="Open reading progress slider"
+          <IconButton className={classes.button} aria-label="Open reading progress slider"
             style={{ width: "80px" }}
             onClick={clickReadingProgress}>
             <span style={{ fontSize: "0.8rem" }}>{`${readingProgress ? readingProgress.toFixed(2) : 0} %`} </span>

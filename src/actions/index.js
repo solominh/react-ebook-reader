@@ -4,7 +4,7 @@ import epubLink from "../res/ebook/dragon-king.epub";
 import _ from "lodash";
 // import axios from "axios";
 import localforage from 'localforage';
-import { SETTINGS_KEY, defaultSettings } from '../constants';
+import { SETTINGS_KEY, defaultSettings, settingOptions } from '../constants';
 
 export const clickPrevButton = () => {
   return (dispatch, getState) => {
@@ -97,34 +97,39 @@ const init = () => {
   // };
 
 
-  // EPUBJS.Hooks.register("beforeChapterDisplay").pageTurns = function (callback, renderer) {
-  //   var lock = false;
-  //   var arrowKeys = function (e) {
-  //     e.preventDefault();
-  //     if (lock) return;
+  EPUBJS.Hooks.register("beforeChapterDisplay").pageTurns = function (callback, renderer) {
+    var lock = false;
+    var arrowKeys = function (e) {
+      console.log("asdadasd");
+      e.preventDefault();
+      if (lock) return;
+      if (e.keyCode == 37) {
+        ePubViewer.Book.prevPage();
+        lock = true;
+        setTimeout(function () {
+          lock = false;
+        }, 100);
+        return false;
+      }
 
-  //     if (e.keyCode == 37) {
-  //       ePubViewer.Book.prevPage();
-  //       lock = true;
-  //       setTimeout(function () {
-  //         lock = false;
-  //       }, 100);
-  //       return false;
-  //     }
+      if (e.keyCode == 39) {
+        ePubViewer.Book.nextPage();
+        lock = true;
+        setTimeout(function () {
+          lock = false;
+        }, 100);
+        return false;
+      }
 
-  //     if (e.keyCode == 39) {
-  //       ePubViewer.Book.nextPage();
-  //       lock = true;
-  //       setTimeout(function () {
-  //         lock = false;
-  //       }, 100);
-  //       return false;
-  //     }
+    };
+    renderer.doc.addEventListener('keydown', arrowKeys, false);
+    if (callback) callback();
+  }
 
-  //   };
-  //   renderer.doc.addEventListener('keydown', arrowKeys, false);
-  //   if (callback) callback();
-  // }
+  EPUBJS.Hooks.register("beforeChapterDisplay").settings = function (callback, renderer) {
+    loadSettings()
+    if (callback) callback();
+  };
 }
 
 init()
@@ -175,7 +180,7 @@ export const loadEbook = (bookPath, renderArea) => {
       }
     });
     window.book = book
-
+    ePubViewer.Book = book
     book.open(bookPath)
 
     // book.getMetadata().then(meta => {
@@ -249,7 +254,7 @@ export const loadEbook = (bookPath, renderArea) => {
       // Goto cached cfi
       const key = `book_${bookID}_curPosCfi`;
       const cachedCurPosCfi = await localforage.getItem(key)
-      if(cachedCurPosCfi) book.gotoCfi(cachedCurPosCfi)
+      if (cachedCurPosCfi) book.gotoCfi(cachedCurPosCfi)
 
     } catch (err) {
       console.log(err);
@@ -276,6 +281,7 @@ export const loadSettings = () => {
         type: types.LOADING_SETTINGS_SUCCEEDED,
         settings,
       })
+      applySettings(settings, getState().book)
     } catch (err) {
       dispatch({
         type: types.LOADING_SETTINGS_FAILED
@@ -290,6 +296,9 @@ export const updateSettings = (settings) => {
       type: types.LOADING_SETTINGS_SUCCEEDED,
       settings,
     })
+
+    applySettings(settings, getState().book)
+
     try {
       await localforage.setItem(SETTINGS_KEY, settings)
     } catch (err) {
@@ -304,10 +313,99 @@ export const resetSettings = () => {
       type: types.LOADING_SETTINGS_SUCCEEDED,
       settings: defaultSettings,
     })
+
+    applySettings(defaultSettings, getState().book)
+
     try {
       await localforage.setItem(SETTINGS_KEY, defaultSettings)
     } catch (err) {
       console.log(err);
     }
+  }
+}
+
+function applySettings(settings, book) {
+  const { fonts, themes } = settingOptions;
+  var font = settingOptions.fonts[settings.font] || fonts.ArbutusSlab;
+  var theme = settingOptions.themes[settings.theme] || themes.SepiaLight;
+
+  try {
+    if (theme.light) {
+      document.body.classList.remove("dark");
+      document.body.classList.add("light");
+    } else {
+      document.body.classList.add("dark");
+      document.body.classList.remove("light");
+    }
+  } catch (ex) { }
+
+  try {
+    var doc = book.renderer.doc;
+    if (doc.getElementById("ePubViewerSettings") === null) {
+      doc.body.appendChild(doc.createElement("style")).id = "ePubViewerSettings";
+    }
+    var styleEl = doc.getElementById("ePubViewerSettings");
+    styleEl.innerHTML = `
+      html,body{
+        font-family:${font["font-family"]};
+        font-size:${settings["font-size"]}px;
+        color:${theme.color}!important;
+        background-color:${theme["background-color"]}!important;
+        line-height:${settings["line-height"]}!important;
+      }
+      p{
+        font-family:${font["font-family"]}!important;
+        font-size:${settings["font-size"]}px!important;
+      }
+      `
+    if (font.link) {
+      if (doc.getElementById("ePubViewerFontLink") === null) {
+        doc.body.appendChild(doc.createElement("link")).id = "ePubViewerFontLink";
+      }
+      var el = document.getElementById("ePubViewerFontLink");
+      el.setAttribute("rel", "stylesheet");
+      el.setAttribute("href", font.link);
+    }
+  } catch (e) { }
+
+  if (document.getElementById("ePubViewerAppSettings") === null) {
+    document.body.appendChild(document.createElement("style")).id = "ePubViewerAppSettings";
+  }
+  var styleEla = document.getElementById("ePubViewerAppSettings");
+  styleEla.innerHTML = [
+    ".reader {",
+    "font-family: " + font["font-family"] + ";",
+    "color: " + theme.color + ";",
+    "background-color: " + theme["background-color"] + ";",
+    "}",
+    ".reader .main .content {",
+    "margin: 5px " + settings.margin + ";",
+    "}",
+    ".reader .main .sidebar.overlay {",
+    "color: " + theme.color + ";",
+    "background: " + theme["background-color"] + " !important;",
+    "}",
+  ].join("\n");
+  styleEla.innerHTML =`
+    #contentWrapper{
+      font-family:${font["font-family"]};
+      color: ${theme.color};
+      background-color: ${theme["background-color"] };
+    }
+    #area {
+      margin: 20px ${settings.margin}%;
+    }
+    // .reader .main .sidebar.overlay {
+    //   color:  ${theme.color}
+    //   background: ${ theme["background-color"]}!important;
+    // }
+  `
+  if (font.link) {
+    if (document.getElementById("ePubViewerAppFontLink") === null) {
+      document.body.appendChild(document.createElement("link")).id = "ePubViewerAppFontLink";
+    }
+    var ela = document.getElementById("ePubViewerAppFontLink");
+    ela.setAttribute("rel", "stylesheet");
+    ela.setAttribute("href", font.link);
   }
 }

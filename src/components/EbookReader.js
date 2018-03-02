@@ -42,8 +42,8 @@ const styles = theme => ({
     height: "100%",
     visibility: "hidden",
     marginLeft: -TOCWidth,
-    backgroundColor: "#FFFFFF",
-    border: "1px solid #eee",
+    backgroundColor: "#EEEEEE",
+    borderRight: "1px solid #9E9E9E",
     transition: theme.transitions.create(["margin"], {
       easing: theme.transitions.easing.easeOut,
       duration: theme.transitions.duration.enteringScreen
@@ -74,25 +74,29 @@ const styles = theme => ({
     width: "100%",
     padding: "20px 20px 20px 20px",
     backgroundColor: "#EEEEEE",
-    borderTop: "1px solid #616161"
+    borderTop: "1px solid #9E9E9E"
   },
   moreView: {
     width: "100%",
     padding: "20px 20px 20px 20px",
     backgroundColor: "#EEEEEE",
-    borderTop: "1px solid #616161"
+    borderTop: "1px solid #9E9E9E"
   },
   textWrapper: {
-    width: "90%",
+    width: "100%",
     height: "100%",
     position: "absolute",
-    padding: 20,
-    margin: "0px 5%",
+    display: "flex",
+    // padding: 20,
+    // margin: "0px 5%",
     // maxWidth: 1250,
     "& iframe": {
       border: "none"
     },
-    columnGap: "10px!important"
+  },
+  text: {
+    flex: 1,
+    margin: "20px 5%"
   },
   navWrapper: {
     width: "100%",
@@ -179,12 +183,12 @@ class EbookReader extends Component {
   });
   */
   componentDidMount() {
-    this.props.loadEbook(this.props.bookPath,this.renderArea)
+    this.props.loadEbook(this.props.bookPath, this.renderArea)
   }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.bookPath && nextProps.bookPath !== this.props.bookPath) {
-      this.props.loadEbook(nextProps.bookPath,this.renderArea)
+      this.props.loadEbook(nextProps.bookPath, this.renderArea)
     }
   }
 
@@ -197,11 +201,11 @@ class EbookReader extends Component {
   }
 
   onKeyDown = (e) => {
-    if (e.key === "ArrowLeft") {
-      this.props.clickPrevButton()
-    } else if (e.key === "ArrowRight") {
-      this.props.clickNextButton()
-    }
+    // if (e.key === "ArrowLeft") {
+    //   this.props.clickPrevButton()
+    // } else if (e.key === "ArrowRight") {
+    //   this.props.clickNextButton()
+    // }
   }
 
   render() {
@@ -238,14 +242,16 @@ class EbookReader extends Component {
               selectedItem={currentChapterIndex}
               onItemSelected={gotoChapter}
             /> */}
-            <Settings/>
+            <Settings />
             {/* <BookInfo/> */}
           </div>
         </div>
 
-        <div className={classes.contentWrapper}>
+        <div className={classes.contentWrapper} id="contentWrapper">
           <div className={classes.readingArea}>
-            <div className={classes.textWrapper} ref={el => this.renderArea = el} id="area" />
+            <div className={classes.textWrapper} >
+              <div className={classes.text} ref={el => this.renderArea = el} id="area" />
+            </div>
             <div className={classes.navWrapper}>
               <div
                 className={cn(classes.arrowWrapper, classes.arrowWrapperLeft)}
