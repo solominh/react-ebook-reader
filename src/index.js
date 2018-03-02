@@ -4,7 +4,7 @@ import ReactDOM from "react-dom";
 import "./index.css";
 // import "typeface-roboto";
 import registerServiceWorker from "./registerServiceWorker";
-import App from "./components/App";
+import AppWithTheme from "./components/AppWithTheme";
 import configureStore from "./configureStore";
 
 
@@ -17,7 +17,7 @@ const { store, history } = configureStore();
 ReactDOM.render(
   <Provider store={store}>
     <BrowserRouter history={history}>
-      <App />
+      <AppWithTheme />
     </BrowserRouter>
   </Provider>,
   document.getElementById("root")

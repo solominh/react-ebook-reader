@@ -393,7 +393,7 @@ function applySettings(settings, book) {
       background-color: ${theme["background-color"] };
     }
     #area {
-      margin: 20px ${settings.margin}%;
+      margin: 20px ${settings.margin}% 0px ${settings.margin}%;
     }
     // .reader .main .sidebar.overlay {
     //   color:  ${theme.color}

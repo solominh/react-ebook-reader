@@ -54,7 +54,7 @@ const styles = theme => ({
     outlineOffset: -20
   },
   content: {
-    padding: "100px 160px",
+    padding: "50px 80px",
     display:"flex",
     flexDirection:"column",
     alignItems:"center"

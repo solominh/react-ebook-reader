@@ -42,8 +42,8 @@ const styles = theme => ({
     height: "100%",
     visibility: "hidden",
     marginLeft: -TOCWidth,
-    backgroundColor: "#EEEEEE",
-    borderRight: "1px solid #9E9E9E",
+    backgroundColor: "#F5F5F5",
+    borderRight: "1px solid #BDBDBD",
     transition: theme.transitions.create(["margin"], {
       easing: theme.transitions.easing.easeOut,
       duration: theme.transitions.duration.enteringScreen
@@ -73,14 +73,14 @@ const styles = theme => ({
   slider: {
     width: "100%",
     padding: "20px 20px 20px 20px",
-    backgroundColor: "#EEEEEE",
-    borderTop: "1px solid #9E9E9E"
+    backgroundColor: "#F5F5F5",
+    borderTop: "1px solid #BDBDBD"
   },
   moreView: {
     width: "100%",
     padding: "20px 20px 20px 20px",
-    backgroundColor: "#EEEEEE",
-    borderTop: "1px solid #9E9E9E"
+    backgroundColor: "#F5F5F5",
+    borderTop: "1px solid #BDBDBD"
   },
   textWrapper: {
     width: "100%",
@@ -96,7 +96,7 @@ const styles = theme => ({
   },
   text: {
     flex: 1,
-    margin: "20px 5%"
+    margin: "20px 5% 0px 5%"
   },
   navWrapper: {
     width: "100%",
@@ -112,13 +112,13 @@ const styles = theme => ({
     width: "40%",
     height: "100%",
     fontSize: 64,
-    color: "#E2E2E2",
+    color: "rgba(0,0,0,0)",
     fontFamily: "arial, sans-serif",
     fontWeight: "bold",
     cursor: "pointer",
     userSelect: "none",
     "&:hover": {
-      color: "#777"
+      color: "rgba(0,0,0,0.1)"
     },
     "&:active": {
       color: "#000"
