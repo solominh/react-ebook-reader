@@ -6,6 +6,7 @@ const initialState = {
   isLoading: true,
   book: null,
   bookPath: null,
+  coverURL: null,
   currentChapterIndex: null,
   readingProgress: null,
   isReadingProgressSliderOpen: false,
@@ -43,7 +44,9 @@ export default function (state = initialState, action) {
       return {
         ...state,
         isLoading: false,
-        book: action.book
+        book: action.book,
+        toc: action.toc,
+        coverURL: action.coverURL
       };
     }
     case types.LOADING_EBOOK_FAILED: {

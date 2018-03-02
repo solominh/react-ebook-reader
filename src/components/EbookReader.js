@@ -20,6 +20,7 @@ import {
 } from "../actions";
 import MoreView from "./MoreView";
 import Settings from "./Settings";
+import BookInfo from "./BookInfo";
 
 const TOCWidth = 300;
 
@@ -237,7 +238,8 @@ class EbookReader extends Component {
               selectedItem={currentChapterIndex}
               onItemSelected={gotoChapter}
             /> */}
-            <Settings/>
+            {/* <Settings/> */}
+            <BookInfo/>
           </div>
         </div>
 

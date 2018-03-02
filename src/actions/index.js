@@ -172,24 +172,32 @@ export const loadEbook = (bookPath, renderArea) => {
         // "background-color":"red"
       }
     });
+    window.book = book
 
     book.open(bookPath)
 
-    book.getMetadata().then(meta => {
-      document.title = meta.bookTitle + " – " + meta.creator;
-    });
+    // book.getMetadata().then(meta => {
+    //   document.title = meta.bookTitle + " – " + meta.creator;
+    // });
 
-    book.getToc().then(toc => {
-      // this.setState({ toc });
-      book.toc = toc;
-      dispatch({ type: "ABC" });
-    });
+    // book.getToc().then(toc => {
+    //   book.toc = toc;
+    //   dispatch({ type: "ABC" });
+    // });
 
     renderArea.innerHTML = ""
     book.renderTo(renderArea);
 
     try {
       await book.ready.all;
+
+      // Update title
+      const meta = await book.getMetadata();
+      document.title = meta.bookTitle + " – " + meta.creator;
+
+      let coverURL = await book.coverUrl();
+      let toc = await book.getToc()
+
       // Generate page
       book.generatePagination().then(toc => {
         console.log("Pagination generated");
@@ -223,7 +231,9 @@ export const loadEbook = (bookPath, renderArea) => {
 
       dispatch({
         type: types.LOADING_EBOOK_SUCCEEDED,
-        book
+        book,
+        toc,
+        coverURL,
       });
     } catch (err) {
       console.log(err);
