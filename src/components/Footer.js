@@ -29,7 +29,6 @@ const styles = theme => ({
     justifyContent: "flex-end"
   },
   button: {
-    color: "inherit"
   },
 });
 
@@ -45,7 +44,7 @@ class Footer extends Component {
     return (
       <div className={classes.wrapper}>
         <div style={{ flex: 1 }}>
-          <Tooltip title="Table of content" placement="top"  enterDelay={300}>
+          <Tooltip title="Table of contents" placement="top"  enterDelay={300}>
             <IconButton className={classes.button} aria-label="Open TOC" style={{ flex: 1 }} onClick={toggleTOC} >
               <TOCIcon />
             </IconButton>

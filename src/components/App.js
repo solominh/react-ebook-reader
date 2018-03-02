@@ -20,10 +20,6 @@ const styles = {
 
 class App extends Component {
 
-  componentWillMount() {
-    this.props.loadSettings();
-  }
-
   render() {
     return (
       <div style={styles.wrapper}>

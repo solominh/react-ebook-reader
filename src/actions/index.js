@@ -87,17 +87,16 @@ const init = () => {
 
   EPUBJS.Hooks.register("beforeChapterDisplay").styles = function (callback, renderer) {
     window.a = renderer
-    renderer.doc.body.appendChild(document.createElement("style")).innerHTML = [
-      "a:link, a:visited {",
-      "    color: inherit;",
-      "    background: rgba(0,0,0,0.05);",
-      "}",
-      "",
-      "html {",
-      "    line-height: 1.5;",
-      "    column-rule: 1px inset rgba(0,0,0,0.05);",
-      "}"
-    ].join("\n");
+    renderer.doc.body.appendChild(document.createElement("style")).innerHTML = `
+      a:link, a:visited {
+        color: inherit;
+        background: rgba(0,0,0,0.05);
+      }
+      html {
+        line-height: 1.5;
+        column-rule: 1px inset rgba(0,0,0,0.05);
+      }
+    `
     if (callback) callback();
   };
 
@@ -388,20 +387,6 @@ function applySettings(settings, book) {
     document.body.appendChild(document.createElement("style")).id = "ePubViewerAppSettings";
   }
   var styleEla = document.getElementById("ePubViewerAppSettings");
-  styleEla.innerHTML = [
-    ".reader {",
-    "font-family: " + font["font-family"] + ";",
-    "color: " + theme.color + ";",
-    "background-color: " + theme["background-color"] + ";",
-    "}",
-    ".reader .main .content {",
-    "margin: 5px " + settings.margin + ";",
-    "}",
-    ".reader .main .sidebar.overlay {",
-    "color: " + theme.color + ";",
-    "background: " + theme["background-color"] + " !important;",
-    "}",
-  ].join("\n");
   styleEla.innerHTML = `
     #contentWrapper{
       font-family:${font["font-family"]};
@@ -411,10 +396,10 @@ function applySettings(settings, book) {
     #area {
       margin: 20px ${settings.margin}% 0px ${settings.margin}%;
     }
-    // .reader .main .sidebar.overlay {
-    //   color:  ${theme.color}
-    //   background: ${ theme["background-color"]}!important;
-    // }
+    #sidebar,#content {
+      color:  ${theme.color};
+      background: ${ theme["background-color"]}!important;
+    }
   `
   if (font.link) {
     if (document.getElementById("ePubViewerAppFontLink") === null) {

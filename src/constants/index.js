@@ -81,7 +81,7 @@ export const settingOptions = {
 export const defaultSettings = {
   "theme": "White",
   "font": "OpenSans",
-  "line-height": "1.5",
-  "font-size": "11",
-  "margin": "5"
+  "line-height": 1.5,
+  "font-size": 14,
+  "margin": 5
 }

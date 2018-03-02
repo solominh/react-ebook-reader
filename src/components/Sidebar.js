@@ -16,6 +16,7 @@ import IconButton from "material-ui/IconButton";
 import ChevronLeftIcon from "material-ui-icons/ChevronLeft";
 import Divider from "material-ui/Divider";
 
+import cn from 'classnames';
 const sidebarWidth = 240;
 
 
@@ -107,14 +108,14 @@ class Sidebar extends Component {
       sidebarTitle = "Search"
     }
     return (
-      <div className={classes.wrapper}>
+      <div className={classes.wrapper} id="sidebar">
         <div className={classes.sidebarHeader}>
           <div className={classes.sidebarTitle}>{sidebarTitle}</div>
           <IconButton onClick={closeSidebar}>
             <ChevronLeftIcon />
           </IconButton>
         </div>
-        <Divider/>
+        <Divider />
         <div className={classes.sidebarContent}>
           {isTOCOpen && (
             <div className={classes.tocWrapper}>

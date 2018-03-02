@@ -64,12 +64,12 @@ const styles = theme => ({
   slider: {
     width: "100%",
     padding: "20px 20px 20px 20px",
-    backgroundColor: "#F5F5F5",
+    // backgroundColor: "#F5F5F5",
     borderTop: "1px solid #BDBDBD"
   },
   moreView: {
     width: "100%",
-    backgroundColor: "#F5F5F5",
+    // backgroundColor: "#F5F5F5",
     borderTop: "1px solid #BDBDBD"
   },
   textWrapper: {

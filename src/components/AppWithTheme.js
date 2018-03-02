@@ -1,40 +1,50 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles';
 import Button from 'material-ui/Button';
 import App from './App';
 
-const theme = createMuiTheme({
-  overrides: {
-    // MuiButton: {
-    //   // Name of the styleSheet
-    //   root: {
-    //     // Name of the rule
-    //     background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)',
-    //     borderRadius: 3,
-    //     border: 0,
-    //     color: 'white',
-    //     height: 48,
-    //     padding: '0 30px',
-    //     boxShadow: '0 3px 5px 2px rgba(255, 105, 135, .30)',
-    //   },
-    // },
-    MuiIconButton:{
-      color:"inherit"
-    },
-    MuiButton:{
-      root:{
-        color:"inherit"
-      }
-    }
-  },
-});
+import { withStyles } from "material-ui/styles";
+import { withRouter } from "react-router";
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+import { loadSettings } from "../actions";
 
-function AppWithTheme() {
-  return (
-    <MuiThemeProvider theme={theme}>
-      <App/>
-    </MuiThemeProvider>
-  );
+import { settingOptions } from '../constants';
+
+
+class AppWithTheme extends Component {
+
+  componentWillMount() {
+    this.props.loadSettings();
+  }
+
+  render() {
+    const { settings } = this.props;
+    if (!settings) return null;
+
+    const { fonts, themes } = settingOptions;
+    var font = settingOptions.fonts[settings.font] || fonts.ArbutusSlab;
+    var theme = settingOptions.themes[settings.theme] || themes.SepiaLight;
+
+    const themeType = theme.light ? "light" : "dark";
+    const muiTheme = createMuiTheme({
+      palette: {
+        type: themeType,
+      }
+    });
+
+    return (
+      <MuiThemeProvider theme={muiTheme}>
+        <App />
+      </MuiThemeProvider>
+    );
+  }
 }
 
-export default AppWithTheme;
+// AppWithTheme = withStyles(styles)(AppWithTheme);
+
+const mapStateToProps = ({ settings }) => {
+  return { settings };
+};
+
+export default connect(mapStateToProps, { loadSettings })(AppWithTheme);

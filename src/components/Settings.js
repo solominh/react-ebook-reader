@@ -3,6 +3,7 @@ import Input, { InputLabel } from 'material-ui/Input';
 import { FormControl, FormHelperText } from 'material-ui/Form';
 import Select from 'material-ui/Select';
 import Button from 'material-ui/Button';
+import { MenuItem } from 'material-ui/Menu';
 
 import { withStyles } from 'material-ui/styles';
 import { withRouter } from "react-router";
@@ -21,6 +22,7 @@ const styles = theme => ({
   },
   inputLabel: {
     fontWeight: "bold",
+    fontSize:"1rem",
     flex: 1
   },
   select: {
@@ -50,7 +52,6 @@ class Settings extends Component {
         <div className={classes.formControl}>
           <InputLabel className={classes.inputLabel} htmlFor="font-setting">Font</InputLabel>
           <Select
-            native
             className={classes.select}
             value={settings.font}
             onChange={this.handleChange("font")}
@@ -60,7 +61,7 @@ class Settings extends Component {
           >
             {Object.keys(fonts).map(font => {
               return (
-                <option key={font} value={font}>{fonts[font].label}</option>
+                <MenuItem key={font} value={font}>{fonts[font].label}</MenuItem>
               )
             })}
           </Select>
@@ -69,7 +70,6 @@ class Settings extends Component {
         <div className={classes.formControl}>
           <InputLabel className={classes.inputLabel} htmlFor="theme-setting">Theme</InputLabel>
           <Select
-            native
             className={classes.select}
             value={settings.theme}
             onChange={this.handleChange("theme")}
@@ -79,7 +79,7 @@ class Settings extends Component {
           >
             {Object.keys(themes).map(theme => {
               return (
-                <option key={theme} value={theme}>{themes[theme].label}</option>
+                <MenuItem key={theme} value={theme}>{themes[theme].label}</MenuItem>
               )
             })}
           </Select>
@@ -88,7 +88,6 @@ class Settings extends Component {
         <div className={classes.formControl}>
           <InputLabel className={classes.inputLabel} htmlFor="line-height-setting">Line spacing</InputLabel>
           <Select
-            native
             className={classes.select}
             value={settings["line-height"]}
             onChange={this.handleChange("line-height")}
@@ -98,7 +97,7 @@ class Settings extends Component {
           >
             {lineHeights.map(value => {
               return (
-                <option key={value} value={value}>{value}</option>
+                <MenuItem key={value} value={value}>{value}</MenuItem>
               )
             })}
           </Select>
@@ -107,7 +106,6 @@ class Settings extends Component {
         <div className={classes.formControl}>
           <InputLabel className={classes.inputLabel} htmlFor="font-size-setting">Font size</InputLabel>
           <Select
-            native
             className={classes.select}
             value={settings["font-size"]}
             onChange={this.handleChange("font-size")}
@@ -117,7 +115,7 @@ class Settings extends Component {
           >
             {fontSizes.map(value => {
               return (
-                <option key={value} value={value}>{`${value}`}</option>
+                <MenuItem key={value} value={value}>{`${value}`}</MenuItem>
               )
             })}
           </Select>
@@ -126,7 +124,6 @@ class Settings extends Component {
         <div className={classes.formControl}>
           <InputLabel className={classes.inputLabel} htmlFor="margin-setting">Margin</InputLabel>
           <Select
-            native
             className={classes.select}
             value={settings["margin"]}
             onChange={this.handleChange("margin")}
@@ -136,7 +133,7 @@ class Settings extends Component {
           >
             {margins.map(value => {
               return (
-                <option key={value} value={value}>{`${value}%`}</option>
+                <MenuItem key={value} value={value}>{`${value}%`}</MenuItem>
               )
             })}
           </Select>
