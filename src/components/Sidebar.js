@@ -5,13 +5,16 @@ import { withStyles } from "material-ui/styles";
 import { withRouter } from "react-router";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { gotoChapter } from "../actions";
+import { gotoChapter, closeSidebar } from "../actions";
 
 import TOC from "./TOC";
 import Settings from "./Settings";
 import BookInfo from "./BookInfo";
 import SearchView from "./SearchView";
 
+import IconButton from "material-ui/IconButton";
+import ChevronLeftIcon from "material-ui-icons/ChevronLeft";
+import Divider from "material-ui/Divider";
 
 const sidebarWidth = 240;
 
@@ -20,6 +23,11 @@ const styles = theme => ({
   wrapper: {
     width: "100%",
     height: "100%",
+    display: "flex",
+    flexDirection: "column"
+  },
+  sidebarContent: {
+    flex: 1
   },
   sidebar: {
     width: sidebarWidth,
@@ -42,8 +50,8 @@ const styles = theme => ({
   tocWrapper: {
     width: "100%",
     height: "100%",
-    display:"flex",
-    flexDirection:"column"
+    display: "flex",
+    flexDirection: "column"
   },
   tocInnerWrapper: {
     width: "100%",
@@ -68,50 +76,79 @@ const styles = theme => ({
     fontSize: "1.2rem",
     textAlign: "center",
     fontWeight: "bold",
-    padding: 8
-  }
+    padding: 8,
+  },
+  sidebarHeader: {
+    display: "flex",
+    alignItems: "center"
+  },
+  sidebarTitle: {
+    fontSize: "1.2rem",
+    fontWeight: "bold",
+    padding: 8,
+    flex: 1
+  },
+
 })
 
 class Sidebar extends Component {
   render() {
     const { classes, book, currentChapterIndex, isTOCOpen, isBookInfoOpen, isSettingsOpen,
-      isSearchOpen, gotoChapter } = this.props
+      isSearchOpen, gotoChapter, closeSidebar } = this.props
 
-    const toc = book ? book.toc : null;
+    let sidebarTitle;
+    if (isTOCOpen) {
+      sidebarTitle = book ? book.metadata.bookTitle : ""
+    } else if (isBookInfoOpen) {
+      sidebarTitle = "Info"
+    } else if (isSettingsOpen) {
+      sidebarTitle = "Settings"
+    } else if (isSearchOpen) {
+      sidebarTitle = "Search"
+    }
     return (
       <div className={classes.wrapper}>
-        {isTOCOpen && (
-          <div className={classes.tocWrapper}>
-            <div className={classes.bookTitle}>
-              {book ? book.metadata.bookTitle : ""}
+        <div className={classes.sidebarHeader}>
+          <div className={classes.sidebarTitle}>{sidebarTitle}</div>
+          <IconButton onClick={closeSidebar}>
+            <ChevronLeftIcon />
+          </IconButton>
+        </div>
+        <Divider/>
+        <div className={classes.sidebarContent}>
+          {isTOCOpen && (
+            <div className={classes.tocWrapper}>
+              {/* <div className={classes.bookTitle}>
+                {book ? book.metadata.bookTitle : ""}
+              </div> */}
+              <div className={classes.tocInnerWrapper}>
+                <TOC
+                  data={book ? book.toc : null}
+                  selectedItem={currentChapterIndex}
+                  onItemSelected={gotoChapter}
+                />
+              </div>
             </div>
-            <div className={classes.tocInnerWrapper}>
-              <TOC
-                data={toc}
-                selectedItem={currentChapterIndex}
-                onItemSelected={gotoChapter}
-              />
+          )}
+
+          {isSettingsOpen && (
+            <div className={classes.settingsWrapper}>
+              <Settings />
             </div>
-          </div>
-        )}
+          )}
 
-        {isSettingsOpen && (
-          <div className={classes.settingsWrapper}>
-            <Settings />
-          </div>
-        )}
+          {isBookInfoOpen && (
+            <div className={classes.bookInfoWrapper}>
+              <BookInfo />
+            </div>
+          )}
 
-        {isBookInfoOpen && (
-          <div className={classes.bookInfoWrapper}>
-            <BookInfo />
-          </div>
-        )}
-
-        {isSearchOpen && (
-          <div className={classes.searchWrapper}>
-            <SearchView />
-          </div>
-        )}
+          {isSearchOpen && (
+            <div className={classes.searchWrapper}>
+              <SearchView />
+            </div>
+          )}
+        </div>
       </div>
     );
   }
@@ -135,5 +172,6 @@ const mapStateToProps = ({ book, currentChapterIndex, isTOCOpen,
 };
 
 export default connect(mapStateToProps, {
-  gotoChapter
+  gotoChapter,
+  closeSidebar
 })(Sidebar);

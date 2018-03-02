@@ -10,7 +10,7 @@ const initialState = {
   currentChapterIndex: null,
   readingProgress: null,
   isReadingProgressSliderOpen: false,
-  isMoreViewOpen: true,
+  isMoreViewOpen: false,
   isTOCOpen: false,
   isBookInfoOpen: false,
   isSettingsOpen: false,
@@ -93,6 +93,15 @@ export default function (state = initialState, action) {
         isBookInfoOpen: false,
         isSettingsOpen: false,
         isSearchOpen: !state.isSearchOpen,
+      }
+    }
+    case types.CLOSE_SIDEBAR: {
+      return {
+        ...state,
+        isTOCOpen: false,
+        isBookInfoOpen: false,
+        isSettingsOpen: false,
+        isSearchOpen: false,
       }
     }
     case types.TOGGLE_MORE_VIEW: {

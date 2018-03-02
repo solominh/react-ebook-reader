@@ -28,21 +28,25 @@ export const toggleTOC = () => ({
   type: types.TOGGLE_TOC
 });
 
-export const toggleBookInfo=()=>({
+export const toggleBookInfo = () => ({
   type: types.TOGGLE_BOOK_INFO
 })
 
-export const toggleSettings=()=>({
+export const toggleSettings = () => ({
   type: types.TOGGLE_SETTINGS
 })
 
-export const toggleSearch=()=>({
+export const toggleSearch = () => ({
   type: types.TOGGLE_SEARCH
 })
 
 export const toggleMoreView = () => ({
   type: types.TOGGLE_MORE_VIEW
 });
+
+export const closeSidebar = () => ({
+  type: types.CLOSE_SIDEBAR
+})
 
 export const changeReadingProgress = value => ({
   type: types.CHANGE_READING_PROGRESS,
@@ -398,11 +402,11 @@ function applySettings(settings, book) {
     "background: " + theme["background-color"] + " !important;",
     "}",
   ].join("\n");
-  styleEla.innerHTML =`
+  styleEla.innerHTML = `
     #contentWrapper{
       font-family:${font["font-family"]};
       color: ${theme.color};
-      background-color: ${theme["background-color"] };
+      background-color: ${theme["background-color"]};
     }
     #area {
       margin: 20px ${settings.margin}% 0px ${settings.margin}%;

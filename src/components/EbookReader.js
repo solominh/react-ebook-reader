@@ -69,7 +69,6 @@ const styles = theme => ({
   },
   moreView: {
     width: "100%",
-    padding: "20px 20px 20px 20px",
     backgroundColor: "#F5F5F5",
     borderTop: "1px solid #BDBDBD"
   },
