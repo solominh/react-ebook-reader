@@ -67,15 +67,21 @@ const ePubViewer = {}
 const init = () => {
   const EPUBJS = window.EPUBJS;
 
-  const Book = window.ePub({
-    // gap:30,
-    // Inject style to body
-    styles: {
-      // "column-rule":"1px inset rgba(0,0,0,0.05)",
-      // "background-color":"red"
-    }
-  });
-  ePubViewer.Book = Book;
+  EPUBJS.Hooks.register("beforeChapterDisplay").styles = function (callback, renderer) {
+    window.a = renderer
+    renderer.doc.body.appendChild(document.createElement("style")).innerHTML = [
+      "a:link, a:visited {",
+      "    color: inherit;",
+      "    background: rgba(0,0,0,0.05);",
+      "}",
+      "",
+      "html {",
+      "    line-height: 1.5;",
+      "    column-rule: 1px inset rgba(0,0,0,0.05);",
+      "}"
+    ].join("\n");
+    if (callback) callback();
+  };
 
   // EPUBJS.Hooks.register('beforeChapterDisplay').swipeDetection = function (callback, renderer) {
   //   var script = renderer.doc.createElement('script');
@@ -88,7 +94,7 @@ const init = () => {
   //   }
   // };
 
-  
+
   // EPUBJS.Hooks.register("beforeChapterDisplay").pageTurns = function (callback, renderer) {
   //   var lock = false;
   //   var arrowKeys = function (e) {
@@ -117,10 +123,9 @@ const init = () => {
   //   renderer.doc.addEventListener('keydown', arrowKeys, false);
   //   if (callback) callback();
   // }
-
 }
 
-// init()
+init()
 
 const getBufferFromFile = file => {
   if (!file) return Promise.reject();
@@ -146,19 +151,28 @@ export const selectEbook = (bookPath) => ({
 
 // url = "https://s3.amazonaws.com/moby-dick/"
 // url="https://rawgit.com/solominh/react-ebook-reader/master/src/res/ebook/dragon-king.epub"
-export const loadEbook = (bookPath) => {
+export const loadEbook = (bookPath, renderArea) => {
+  if (!bookPath) return;
+
   return async (dispatch, getState) => {
-    init()
+
     dispatch({
       type: types.LOADING_EBOOK_REQUESTED
     });
 
-    const book = ePubViewer.Book;
     if (!(typeof bookPath === "string")) {
       bookPath = await getBufferFromFile(bookPath)
     }
 
-    console.log(bookPath);
+    const book = window.ePub({
+      // gap:30,
+      // Inject style to body
+      styles: {
+        // "column-rule":"1px inset rgba(0,0,0,0.05)",
+        // "background-color":"red"
+      }
+    });
+
     book.open(bookPath)
 
     book.getMetadata().then(meta => {
@@ -171,28 +185,11 @@ export const loadEbook = (bookPath) => {
       dispatch({ type: "ABC" });
     });
 
-    book.renderTo("area");
+    renderArea.innerHTML = ""
+    book.renderTo(renderArea);
 
     try {
       await book.ready.all;
-
-      window.EPUBJS.Hooks.register("beforeChapterDisplay").styles = function (callback, renderer) {
-        window.a = renderer
-        renderer.doc.body.appendChild(document.createElement("style")).innerHTML = [
-          "a:link, a:visited {",
-          "    color: inherit;",
-          "    background: rgba(0,0,0,0.05);",
-          "}",
-          "",
-          "html {",
-          "    line-height: 1.5;",
-          "    column-rule: 1px inset rgba(0,0,0,0.05);",
-          "}"
-        ].join("\n");
-        if (callback) callback();
-      };
-    
-
       // Generate page
       book.generatePagination().then(toc => {
         console.log("Pagination generated");

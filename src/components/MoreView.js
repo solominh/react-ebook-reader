@@ -4,13 +4,16 @@ import { withStyles } from "material-ui/styles";
 import SettingsIcon from "material-ui-icons/Settings";
 import InfoIcon from "material-ui-icons/Info";
 import SearchIcon from "material-ui-icons/Search";
-import OpenFileIcon from "material-ui-icons/FileUpload";
+import OpenEbookIcon from "material-ui-icons/FileUpload";
 import IconButton from "material-ui/IconButton";
 
 import { withRouter } from "react-router";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { clickReadingProgress, toggleTOC } from "../actions";
+import { selectEbook } from "../actions";
+
+import Dropzone from "react-dropzone";
+
 
 const styles = theme => ({
   wrapper: {
@@ -18,25 +21,43 @@ const styles = theme => ({
     alignItems: "center",
     // padding: 8
   },
+  openFile: {
+    display: "inline-block"
+  }
 })
 
 class MoreView extends Component {
+
+
+  onDrop = (files) => {
+    console.log(files);
+    if (files.length === 0) return;
+    this.props.selectEbook(files[0])
+  }
+
   render() {
-    const {classes}=this.props
+    const { classes } = this.props
     return (
       <div>
+        <IconButton>
+          <InfoIcon />
+        </IconButton>
+        <IconButton>
+          <SearchIcon />
+        </IconButton>
+        <IconButton>
+          <SettingsIcon />
+        </IconButton>
+
+        <Dropzone
+          className={classes.openFile}
+          accept="application/epub+zip"
+          onDrop={this.onDrop}
+        >
           <IconButton>
-            <InfoIcon/>
+            <OpenEbookIcon />
           </IconButton>
-          <IconButton>
-            <SearchIcon/>
-          </IconButton>
-          <IconButton>
-            <SettingsIcon/>
-          </IconButton>
-          <IconButton>
-            <OpenFileIcon/>
-          </IconButton>
+        </Dropzone>
       </div>
     );
   }
@@ -50,4 +71,5 @@ const mapStateToProps = ({ readingProgress }) => {
 };
 
 export default connect(mapStateToProps, {
+  selectEbook
 })(MoreView);

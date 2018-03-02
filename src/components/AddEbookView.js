@@ -8,7 +8,7 @@ import { bindActionCreators } from "redux";
 import { selectEbook } from "../actions";
 
 import { withStyles } from "material-ui/styles";
-import Icon from 'material-ui-icons/FolderOpen';
+import OpenEbookIcon from 'material-ui-icons/FileUpload';
 
 const styles = theme => ({
   wrapper: {
@@ -85,6 +85,7 @@ class AddEbookView extends Component {
   onDrop = (files) => {
     this.setState({ dropzoneActive: false })
     console.log(files);
+    if(files.length ===0) return;
     this.props.selectEbook(files[0])
   }
 
@@ -104,7 +105,7 @@ class AddEbookView extends Component {
         >
           <div className={cn(classes.innerWrapper, { [classes.innerWrapperActive]: dropzoneActive })}>
             <div className={classes.content}>
-              <Icon className={classes.icon}/>
+              <OpenEbookIcon className={classes.icon}/>
               <div>
                 Choose a .epub file or drag it here
               </div>

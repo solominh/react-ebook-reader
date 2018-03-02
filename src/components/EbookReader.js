@@ -177,11 +177,13 @@ class EbookReader extends Component {
   });
   */
   componentDidMount() {
-    // this.props.loadEbook(this.props.ebookURL);
-    // if (this.props.ebookURL) {
-    // this.props.loadEbook(this.props.ebookURL);
-    // }
-    this.props.loadEbook(this.props.bookPath)
+    this.props.loadEbook(this.props.bookPath,this.renderArea)
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.bookPath && nextProps.bookPath !== this.props.bookPath) {
+      this.props.loadEbook(nextProps.bookPath,this.renderArea)
+    }
   }
 
   componentWillUnmount() {
@@ -239,7 +241,7 @@ class EbookReader extends Component {
 
         <div className={classes.contentWrapper}>
           <div className={classes.readingArea}>
-            <div className={classes.textWrapper} id="area" />
+            <div className={classes.textWrapper} ref={el => this.renderArea = el} id="area" />
             <div className={classes.navWrapper}>
               <div
                 className={cn(classes.arrowWrapper, classes.arrowWrapperLeft)}
