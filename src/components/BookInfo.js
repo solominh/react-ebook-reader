@@ -47,7 +47,7 @@ class BookInfo extends Component {
         <div className="creator">{book.metadata.bookTitle}</div>
         <div>{book.metadata.creator}</div>
         <div className="divider"/>
-        <div>{`${readingPercentage} % read`}</div>
+        <div>{`${readingPercentage}% read`}</div>
         <div>{`Page ${currentPage} of ${totalPages}`}</div>
       </div>
     );

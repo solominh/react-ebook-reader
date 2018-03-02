@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import TOCIcon from "material-ui-icons/Menu";
 import MoreIcon from "material-ui-icons/MoreHoriz";
 import IconButton from "material-ui/IconButton";
+import Tooltip from "material-ui/Tooltip";
 
 import { withStyles } from "material-ui/styles";
 import { withRouter } from "react-router";
@@ -44,21 +45,27 @@ class Footer extends Component {
     return (
       <div className={classes.wrapper}>
         <div style={{ flex: 1 }}>
-          <IconButton className={classes.button} aria-label="Open TOC" style={{ flex: 1 }} onClick={toggleTOC} >
-            <TOCIcon />
-          </IconButton>
+          <Tooltip title="Table of content" placement="top"  enterDelay={300}>
+            <IconButton className={classes.button} aria-label="Open TOC" style={{ flex: 1 }} onClick={toggleTOC} >
+              <TOCIcon />
+            </IconButton>
+          </Tooltip>
         </div>
         <div className={classes.moreMenu} >
-          <IconButton className={classes.button} aria-label="Open more menu" onClick={toggleMoreView} >
-            <MoreIcon />
-          </IconButton>
+          <Tooltip title="More" placement="top"  enterDelay={300}>
+            <IconButton className={classes.button} aria-label="Open more menu" onClick={toggleMoreView} >
+              <MoreIcon />
+            </IconButton>
+          </Tooltip>
         </div>
         <div className={classes.readingProgress}>
-          <IconButton className={classes.button} aria-label="Open reading progress slider"
-            style={{ width: "80px" }}
-            onClick={clickReadingProgress}>
-            <span style={{ fontSize: "0.8rem" }}>{`${readingProgress ? readingProgress.toFixed(2) : 0} %`} </span>
-          </IconButton >
+          <Tooltip title="Open reading progress slider" placement="top"  enterDelay={300}>
+            <IconButton className={classes.button} aria-label="Open reading progress slider"
+              style={{ width: "80px" }}
+              onClick={clickReadingProgress}>
+              <span style={{ fontSize: "0.8rem" }}>{`${readingProgress ? readingProgress.toFixed(2) : 0} %`} </span>
+            </IconButton >
+          </Tooltip>
         </div >
       </div >
     );

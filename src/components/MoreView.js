@@ -6,6 +6,7 @@ import InfoIcon from "material-ui-icons/Info";
 import SearchIcon from "material-ui-icons/Search";
 import OpenEbookIcon from "material-ui-icons/FileUpload";
 import IconButton from "material-ui/IconButton";
+import Tooltip from "material-ui/Tooltip";
 
 import { withRouter } from "react-router";
 import { connect } from "react-redux";
@@ -39,25 +40,35 @@ class MoreView extends Component {
     const { classes, toggleBookInfo, toggleSettings, toggleSearch } = this.props
     return (
       <div>
-        <IconButton onClick={toggleBookInfo}>
-          <InfoIcon />
-        </IconButton>
-        <IconButton onClick={toggleSearch}>
-          <SearchIcon />
-        </IconButton>
-        <IconButton onClick={toggleSettings}>
-          <SettingsIcon />
-        </IconButton>
-
-        <Dropzone
-          className={classes.openFile}
-          accept="application/epub+zip"
-          onDrop={this.onDrop}
-        >
-          <IconButton>
-            <OpenEbookIcon />
+        <Tooltip title="Book info" placement="top">
+          <IconButton onClick={toggleBookInfo}>
+            <InfoIcon />
           </IconButton>
-        </Dropzone>
+        </Tooltip>
+
+        <Tooltip title="Search" placement="top">
+          <IconButton onClick={toggleSearch}>
+            <SearchIcon />
+          </IconButton>
+        </Tooltip>
+
+        <Tooltip title="Settings" placement="top">
+          <IconButton onClick={toggleSettings}>
+            <SettingsIcon />
+          </IconButton>
+        </Tooltip>
+
+        <Tooltip title="Open ebook" placement="top">
+          <Dropzone
+            className={classes.openFile}
+            accept="application/epub+zip"
+            onDrop={this.onDrop}
+          >
+            <IconButton>
+              <OpenEbookIcon />
+            </IconButton>
+          </Dropzone>
+        </Tooltip>
       </div>
     );
   }
