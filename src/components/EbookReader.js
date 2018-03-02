@@ -40,7 +40,7 @@ const styles = theme => ({
     height: "100%",
     visibility: "hidden",
     marginLeft: -sidebarWidth,
-    backgroundColor: "#F5F5F5",
+    // backgroundColor: "#F5F5F5",
     borderRight: "1px solid #BDBDBD",
     transition: theme.transitions.create(["margin"], {
       easing: theme.transitions.easing.easeOut,
@@ -219,7 +219,7 @@ class EbookReader extends Component {
           <Sidebar />
         </div>
 
-        <div className={classes.contentWrapper} id="contentWrapper">
+        <div className={classes.contentWrapper} id="content">
           <div className={classes.readingArea}>
             <div className={classes.textWrapper} >
               <div className={classes.text} ref={el => this.renderArea = el} id="area" />

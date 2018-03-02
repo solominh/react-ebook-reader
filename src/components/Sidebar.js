@@ -108,7 +108,7 @@ class Sidebar extends Component {
       sidebarTitle = "Search"
     }
     return (
-      <div className={classes.wrapper} id="sidebar">
+      <div className={classes.wrapper}>
         <div className={classes.sidebarHeader}>
           <div className={classes.sidebarTitle}>{sidebarTitle}</div>
           <IconButton onClick={closeSidebar}>

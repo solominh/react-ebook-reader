@@ -344,16 +344,19 @@ function applySettings(settings, book) {
   var font = settingOptions.fonts[settings.font] || fonts.ArbutusSlab;
   var theme = settingOptions.themes[settings.theme] || themes.SepiaLight;
 
-  try {
-    if (theme.light) {
-      document.body.classList.remove("dark");
-      document.body.classList.add("light");
-    } else {
-      document.body.classList.add("dark");
-      document.body.classList.remove("light");
-    }
-  } catch (ex) { }
+  // Theme settings
+  // try {
+  //   if (theme.light) {
+  //     document.body.classList.remove("dark");
+  //     document.body.classList.add("light");
+  //   } else {
+  //     document.body.classList.add("dark");
+  //     document.body.classList.remove("light");
+  //   }
+  // } catch (ex) { }
 
+
+  // Book settings
   try {
     var doc = book.renderer.doc;
     if (doc.getElementById("ePubViewerSettings") === null) {
@@ -383,20 +386,21 @@ function applySettings(settings, book) {
     }
   } catch (e) { }
 
+  // App settings
   if (document.getElementById("ePubViewerAppSettings") === null) {
     document.body.appendChild(document.createElement("style")).id = "ePubViewerAppSettings";
   }
   var styleEla = document.getElementById("ePubViewerAppSettings");
   styleEla.innerHTML = `
-    #contentWrapper{
+    #main #content{
       font-family:${font["font-family"]};
       color: ${theme.color};
       background-color: ${theme["background-color"]};
     }
-    #area {
+    #main #area {
       margin: 20px ${settings.margin}% 0px ${settings.margin}%;
     }
-    #sidebar,#content {
+    #main {
       color:  ${theme.color};
       background: ${ theme["background-color"]}!important;
     }
