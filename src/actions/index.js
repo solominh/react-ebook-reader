@@ -199,6 +199,7 @@ export const loadEbook = (bookPath, renderArea) => {
 
       let coverURL = await book.coverUrl();
       let toc = await book.getToc()
+      let bookID = [meta.bookTitle, meta.creator, meta.identifier, meta.publisher].join(":");
 
       // Generate page
       book.generatePagination().then(toc => {
@@ -214,9 +215,15 @@ export const loadEbook = (bookPath, renderArea) => {
 
       // Update selected chapter
       book.on("renderer:locationChanged", location => {
+        const readingProgress = calReadingProgress(book);
+
+        // Cache reading progress
+        const key = `book_${bookID}_curPosCfi`;
+        localforage.setItem(key, book.getCurrentLocationCfi())
+
         dispatch({
           type: types.RENDERER_LOCATION_CHANGED,
-          readingProgress: calReadingProgress(book),
+          readingProgress,
           currentChapterIndex:
             book.tocIndexBySpine[book.currentChapter.spinePos]
         });
@@ -224,19 +231,26 @@ export const loadEbook = (bookPath, renderArea) => {
 
       // Update pagination
       book.on("renderer:resized", () => {
-        _.debounce(() => {
-          book.generatePagination().then(toc => {
-            console.log("Pagination generated");
-          });
-        }, 1000);
+        // _.debounce(() => {
+        //   book.generatePagination().then(toc => {
+        //     console.log("Pagination generated");
+        //   });
+        // }, 1000);
       });
 
       dispatch({
         type: types.LOADING_EBOOK_SUCCEEDED,
         book,
+        bookID,
         toc,
         coverURL,
       });
+
+      // Goto cached cfi
+      const key = `book_${bookID}_curPosCfi`;
+      const cachedCurPosCfi = await localforage.getItem(key)
+      if(cachedCurPosCfi) book.gotoCfi(cachedCurPosCfi)
+
     } catch (err) {
       console.log(err);
       dispatch({
