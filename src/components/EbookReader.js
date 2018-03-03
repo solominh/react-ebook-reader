@@ -15,7 +15,8 @@ import {
   loadEbook,
   clickPrevButton,
   clickNextButton,
-  gotoChapter
+  gotoChapter,
+  applySettingsToChapter
 } from "../actions";
 import MoreView from "./MoreView";
 import Sidebar from "./Sidebar";
@@ -136,10 +137,93 @@ const styles = theme => ({
     alignItems: "center",
     justifyContent: "center"
   },
- 
+
 });
 
 class EbookReader extends Component {
+
+  init = () => {
+    const EPUBJS = window.EPUBJS;
+
+    EPUBJS.Hooks.register('beforeChapterDisplay').swipeDetection = function (callback, renderer) {
+      var script = renderer.doc.createElement('script');
+      script.text = "!function(a,b,c){function f(a){d=a.touches[0].clientX,e=a.touches[0].clientY}function g(f){if(d&&e){var g=f.touches[0].clientX,h=f.touches[0].clientY,i=d-g,j=e-h;Math.abs(i)>Math.abs(j)&&(i>a?b():i<0-a&&c()),d=null,e=null}}var d=null,e=null;document.addEventListener('touchstart',f,!1),document.addEventListener('touchmove',g,!1)}";
+      /* (threshold, leftswipe, rightswipe) */
+      script.text += "(10,function(){parent.ePubViewer.Book.nextPage()},function(){parent.ePubViewer.Book.prevPage()});"
+      renderer.doc.head.appendChild(script);
+      if (callback) {
+        callback();
+      }
+    };
+
+    // Keyboard page turn
+    EPUBJS.Hooks.register("beforeChapterDisplay").pageTurns = (callback, renderer) => {
+      var lock = false;
+      var arrowKeys = (e) => {
+        e.preventDefault();
+        if (lock) return;
+        if (e.keyCode == 37) {
+          this.props.clickPrevButton()
+          lock = true;
+          setTimeout(() => {
+            lock = false;
+          }, 100);
+          return false;
+        }
+
+        if (e.keyCode == 39) {
+          this.props.clickNextButton()
+          lock = true;
+          setTimeout(() => {
+            lock = false;
+          }, 100);
+          return false;
+        }
+
+      };
+      renderer.doc.addEventListener('keydown', arrowKeys, false);
+      if (callback) callback();
+    }
+
+    // Remove select and focus => help page turn by keyboard
+    EPUBJS.Hooks.register("beforeChapterDisplay").noSelection = function (callback, renderer) {
+      renderer.doc.body.appendChild(document.createElement("style")).innerHTML = [
+        "* {",
+        "    -webkit-user-select: none;",
+        "    -moz-user-select: none;",
+        "    -ms-user-select: none;",
+        "    user-select: none;",
+        "    -webkit-user-drag: none;",
+        "    -moz-user-drag: none;",
+        "    -ms-user-drag: none;",
+        "    user-drag: none;",
+        "}"
+      ].join("\n");
+      if (callback) callback();
+    };
+
+    // Add column-rule to ebook
+    EPUBJS.Hooks.register("beforeChapterDisplay").styles = (callback, renderer) => {
+      renderer.doc.body.appendChild(document.createElement("style")).innerHTML = `
+      a:link, a:visited {
+        color: inherit;
+        background: rgba(0,0,0,0.05);
+      }
+      html {
+        line-height: 1.5;
+        column-rule: 1px inset rgba(0,0,0,0.05);
+      }
+    `
+      if (callback) callback();
+    };
+
+    // Apply settings to page
+    EPUBJS.Hooks.register("beforeChapterDisplay").settings = (callback, renderer) => {
+      this.props.applySettingsToChapter();
+      if (callback) callback();
+    };
+  }
+
   /*this.settings = EPUBJS.core.defaults(options || {}, {
 		bookPath : undefined,
 		bookKey : undefined,
@@ -168,6 +252,7 @@ class EbookReader extends Component {
   });
   */
   componentDidMount() {
+    this.init();
     this.props.loadEbook(this.props.bookPath, this.renderArea)
   }
 
@@ -299,5 +384,6 @@ export default connect(mapStateToProps, {
   loadEbook,
   clickPrevButton,
   clickNextButton,
-  gotoChapter
+  gotoChapter,
+  applySettingsToChapter
 })(EbookReader);

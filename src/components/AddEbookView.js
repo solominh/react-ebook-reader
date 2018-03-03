@@ -9,19 +9,23 @@ import { selectEbook } from "../actions";
 
 import { withStyles } from "material-ui/styles";
 import OpenEbookIcon from 'material-ui-icons/FileUpload';
+import sampleEpubLink from '../res/ebook/dragon-king.epub';
+import Button from 'material-ui/Button';
 
 const styles = theme => ({
   wrapper: {
     width: "100%",
     height: "100%",
     display: "flex",
+    flexDirection:"column",
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: "#E5EDF1"
   },
   dropZoneClassName: {
     width: "100%",
-    height: "100%",
+    // height: "100%",
+    flex:1,
     display: "flex",
     alignItems: "center",
     justifyContent: "center"
@@ -89,11 +93,18 @@ class AddEbookView extends Component {
     this.props.selectEbook(files[0])
   }
 
+  onViewSampleEbookClick=()=>{
+    this.props.selectEbook(sampleEpubLink)
+  }
+
   render() {
     const { classes } = this.props
     const { dropzoneActive } = this.state;
     return (
       <div className={classes.wrapper}>
+        <Button variant="raised" color="primary" onClick={this.onViewSampleEbookClick}>
+          View sample.epub
+        </Button>
         <Dropzone
           className={classes.dropZoneClassName}
           acceptClassName={classes.dropZoneAcceptClassName}

@@ -84,77 +84,6 @@ const calReadingProgress = book => {
 };
 
 
-
-
-const ePubViewer = {}
-
-const init = () => {
-  const EPUBJS = window.EPUBJS;
-
-  EPUBJS.Hooks.register("beforeChapterDisplay").styles = function (callback, renderer) {
-    window.a = renderer
-    renderer.doc.body.appendChild(document.createElement("style")).innerHTML = `
-      a:link, a:visited {
-        color: inherit;
-        background: rgba(0,0,0,0.05);
-      }
-      html {
-        line-height: 1.5;
-        column-rule: 1px inset rgba(0,0,0,0.05);
-      }
-    `
-    if (callback) callback();
-  };
-
-  // EPUBJS.Hooks.register('beforeChapterDisplay').swipeDetection = function (callback, renderer) {
-  //   var script = renderer.doc.createElement('script');
-  //   script.text = "!function(a,b,c){function f(a){d=a.touches[0].clientX,e=a.touches[0].clientY}function g(f){if(d&&e){var g=f.touches[0].clientX,h=f.touches[0].clientY,i=d-g,j=e-h;Math.abs(i)>Math.abs(j)&&(i>a?b():i<0-a&&c()),d=null,e=null}}var d=null,e=null;document.addEventListener('touchstart',f,!1),document.addEventListener('touchmove',g,!1)}";
-  //   /* (threshold, leftswipe, rightswipe) */
-  //   script.text += "(10,function(){parent.ePubViewer.Book.nextPage()},function(){parent.ePubViewer.Book.prevPage()});"
-  //   renderer.doc.head.appendChild(script);
-  //   if (callback) {
-  //     callback();
-  //   }
-  // };
-
-
-  EPUBJS.Hooks.register("beforeChapterDisplay").pageTurns = function (callback, renderer) {
-    var lock = false;
-    var arrowKeys = function (e) {
-      console.log("asdadasd");
-      e.preventDefault();
-      if (lock) return;
-      if (e.keyCode == 37) {
-        ePubViewer.Book.prevPage();
-        lock = true;
-        setTimeout(function () {
-          lock = false;
-        }, 100);
-        return false;
-      }
-
-      if (e.keyCode == 39) {
-        ePubViewer.Book.nextPage();
-        lock = true;
-        setTimeout(function () {
-          lock = false;
-        }, 100);
-        return false;
-      }
-
-    };
-    renderer.doc.addEventListener('keydown', arrowKeys, false);
-    if (callback) callback();
-  }
-
-  EPUBJS.Hooks.register("beforeChapterDisplay").settings = function (callback, renderer) {
-    loadSettings()
-    if (callback) callback();
-  };
-}
-
-init()
-
 const getBufferFromFile = file => {
   if (!file) return Promise.reject();
   if (!window.FileReader) {
@@ -200,8 +129,6 @@ export const loadEbook = (bookPath, renderArea) => {
         // "background-color":"red"
       }
     });
-    window.book = book
-    ePubViewer.Book = book
     book.open(bookPath)
 
     // book.getMetadata().then(meta => {
@@ -302,7 +229,7 @@ export const loadSettings = () => {
         type: types.LOADING_SETTINGS_SUCCEEDED,
         settings,
       })
-      applySettings(settings, getState().book)
+      applySettings(getState().book, settings)
     } catch (err) {
       dispatch({
         type: types.LOADING_SETTINGS_FAILED
@@ -318,7 +245,7 @@ export const updateSettings = (settings) => {
       settings,
     })
 
-    applySettings(settings, getState().book)
+    applySettings(getState().book, settings)
 
     try {
       await localforage.setItem(SETTINGS_KEY, settings)
@@ -335,7 +262,7 @@ export const resetSettings = () => {
       settings: defaultSettings,
     })
 
-    applySettings(defaultSettings, getState().book)
+    applySettings(getState().book, defaultSettings)
 
     try {
       await localforage.setItem(SETTINGS_KEY, defaultSettings)
@@ -345,7 +272,52 @@ export const resetSettings = () => {
   }
 }
 
-function applySettings(settings, book) {
+function handleApplySettingsToChapter(book, settings) {
+  const { fonts, themes } = settingOptions;
+  var font = settingOptions.fonts[settings.font] || fonts.ArbutusSlab;
+  var theme = settingOptions.themes[settings.theme] || themes.SepiaLight;
+
+  try {
+    var doc = book.renderer.doc;
+    if (doc.getElementById("ePubViewerSettings") === null) {
+      doc.body.appendChild(doc.createElement("style")).id = "ePubViewerSettings";
+    }
+    var styleEl = doc.getElementById("ePubViewerSettings");
+    styleEl.innerHTML = `
+    html,body{
+      font-family:${font["font-family"]};
+      font-size:${settings["font-size"]}px;
+      color:${theme.color}!important;
+      background-color:${theme["background-color"]}!important;
+      line-height:${settings["line-height"]}!important;
+    }
+    p{
+      font-family:${font["font-family"]}!important;
+      font-size:${settings["font-size"]}px!important;
+    }
+    `
+    if (font.link) {
+      if (doc.getElementById("ePubViewerFontLink") === null) {
+        doc.body.appendChild(doc.createElement("link")).id = "ePubViewerFontLink";
+      }
+      var el = document.getElementById("ePubViewerFontLink");
+      el.setAttribute("rel", "stylesheet");
+      el.setAttribute("href", font.link);
+    }
+  } catch (e) { }
+}
+
+export function applySettingsToChapter() {
+  return async (dispatch, getState) => {
+    const { book, settings } = getState();
+    handleApplySettingsToChapter(book, settings)
+  }
+}
+
+/**
+ * Apply Settings to both app and ebook current chapter
+ */
+function applySettings(book, settings) {
   const { fonts, themes } = settingOptions;
   var font = settingOptions.fonts[settings.font] || fonts.ArbutusSlab;
   var theme = settingOptions.themes[settings.theme] || themes.SepiaLight;
@@ -361,56 +333,25 @@ function applySettings(settings, book) {
   //   }
   // } catch (ex) { }
 
-
-  // Book settings
-  try {
-    var doc = book.renderer.doc;
-    if (doc.getElementById("ePubViewerSettings") === null) {
-      doc.body.appendChild(doc.createElement("style")).id = "ePubViewerSettings";
-    }
-    var styleEl = doc.getElementById("ePubViewerSettings");
-    styleEl.innerHTML = `
-      html,body{
-        font-family:${font["font-family"]};
-        font-size:${settings["font-size"]}px;
-        color:${theme.color}!important;
-        background-color:${theme["background-color"]}!important;
-        line-height:${settings["line-height"]}!important;
-      }
-      p{
-        font-family:${font["font-family"]}!important;
-        font-size:${settings["font-size"]}px!important;
-      }
-      `
-    if (font.link) {
-      if (doc.getElementById("ePubViewerFontLink") === null) {
-        doc.body.appendChild(doc.createElement("link")).id = "ePubViewerFontLink";
-      }
-      var el = document.getElementById("ePubViewerFontLink");
-      el.setAttribute("rel", "stylesheet");
-      el.setAttribute("href", font.link);
-    }
-  } catch (e) { }
-
   // App settings
   if (document.getElementById("ePubViewerAppSettings") === null) {
     document.body.appendChild(document.createElement("style")).id = "ePubViewerAppSettings";
   }
   var styleEla = document.getElementById("ePubViewerAppSettings");
   styleEla.innerHTML = `
-    #main #content{
-      font-family:${font["font-family"]};
-      color: ${theme.color};
-      background-color: ${theme["background-color"]};
-    }
-    #main #area {
-      margin: 20px ${settings.margin}% 0px ${settings.margin}%;
-    }
-    #main {
-      color:  ${theme.color};
-      background: ${ theme["background-color"]}!important;
-    }
-  `
+      #main #content{
+        font-family:${font["font-family"]};
+        color: ${theme.color};
+        background-color: ${theme["background-color"]};
+      }
+      #main #area {
+        margin: 20px ${settings.margin}% 0px ${settings.margin}%;
+      }
+      #main {
+        color:  ${theme.color};
+        background: ${ theme["background-color"]}!important;
+      }
+    `
   if (font.link) {
     if (document.getElementById("ePubViewerAppFontLink") === null) {
       document.body.appendChild(document.createElement("link")).id = "ePubViewerAppFontLink";
@@ -419,4 +360,8 @@ function applySettings(settings, book) {
     ela.setAttribute("rel", "stylesheet");
     ela.setAttribute("href", font.link);
   }
+
+  // Chapter settings
+  handleApplySettingsToChapter(book, settings);
 }
+
