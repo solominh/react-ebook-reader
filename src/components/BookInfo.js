@@ -9,21 +9,21 @@ import { updateSettings } from "../actions";
 
 const styles = {
   wrapper: {
-    width:"100%",
-    height:"100%",
-    lineHeight:"1.3rem",
+    width: "100%",
+    height: "100%",
+    lineHeight: "1.3rem",
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
-    "& .creator":{
-      fontSize:"1.2rem",
-      marginTop:8
+    "& .creator": {
+      fontSize: "1.2rem",
+      marginTop: 8
     },
-    "& .divider":{
-      width:"50%",
-      height:1,
-      margin:4,
-      backgroundColor:"rgba(0,0,0,0.05)"
+    "& .divider": {
+      width: "50%",
+      height: 1,
+      margin: 4,
+      backgroundColor: "rgba(0,0,0,0.05)"
     }
   },
   coverImage: {
@@ -43,10 +43,10 @@ class BookInfo extends Component {
 
     return (
       <div className={classes.wrapper}>
-        <img src={coverURL} className={classes.coverImage} />
+        {coverURL && <img src={coverURL} className={classes.coverImage} />}
         <div className="creator">{book.metadata.bookTitle}</div>
         <div>{book.metadata.creator}</div>
-        <div className="divider"/>
+        <div className="divider" />
         <div>{`${readingPercentage}% read`}</div>
         <div>{`Page ${currentPage} of ${totalPages}`}</div>
       </div>

@@ -150,7 +150,12 @@ export const loadEbook = (bookPath, renderArea) => {
       const meta = await book.getMetadata();
       document.title = meta.bookTitle + " – " + meta.creator;
 
-      let coverURL = await book.coverUrl();
+      let coverURL = null;
+      try {
+        coverURL = await book.coverUrl();
+      } catch (err) {
+        console.log(err);
+      }
       let toc = await book.getToc()
       let bookID = [meta.bookTitle, meta.creator, meta.identifier, meta.publisher].join(":");
 

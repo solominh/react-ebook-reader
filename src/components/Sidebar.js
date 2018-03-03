@@ -27,6 +27,16 @@ const styles = theme => ({
     display: "flex",
     flexDirection: "column"
   },
+  sidebarHeader: {
+    display: "flex",
+    alignItems: "center"
+  },
+  sidebarTitle: {
+    fontSize: "1.2rem",
+    fontWeight: "bold",
+    padding: 8,
+    flex: 1
+  },
   sidebarContent: {
     flex: 1
   },
@@ -79,17 +89,6 @@ const styles = theme => ({
     fontWeight: "bold",
     padding: 8,
   },
-  sidebarHeader: {
-    display: "flex",
-    alignItems: "center"
-  },
-  sidebarTitle: {
-    fontSize: "1.2rem",
-    fontWeight: "bold",
-    padding: 8,
-    flex: 1
-  },
-
 })
 
 class Sidebar extends Component {
