@@ -160,10 +160,11 @@ export const loadEbook = (bookPath, renderArea) => {
       let bookID = [meta.bookTitle, meta.creator, meta.identifier, meta.publisher].join(":");
 
       // Generate page
-      book.generatePagination().then(toc => {
-        console.log("Pagination generated");
-        dispatch(changeReadingProgress(calReadingProgress(book)));
-      });
+      await book.generatePagination()
+      // book.generatePagination().then(toc => {
+      //   console.log("Pagination generated");
+      //   dispatch(changeReadingProgress(calReadingProgress(book)));
+      // });
 
       // Create TOC index
       book.tocIndexBySpine = book.toc.reduce((prev, cur, index) => {
@@ -352,7 +353,7 @@ function applySettings(book, settings) {
       #main #area {
         margin: 20px ${settings.margin}% 0px ${settings.margin}%;
       }
-      #main {
+      #main, #loadingView {
         color:  ${theme.color};
         background: ${ theme["background-color"]}!important;
       }

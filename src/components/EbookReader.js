@@ -134,8 +134,10 @@ const styles = theme => ({
     width: "100%",
     height: "100%",
     display: "flex",
+    flexDirection: "column",
     alignItems: "center",
-    justifyContent: "center"
+    justifyContent: "center",
+    // backgroundColor: "red"
   },
 
 });
@@ -348,13 +350,6 @@ class EbookReader extends Component {
                 {/* <div className={classes.arrowRight}>›</div> */}
               </div>
             </div>
-
-            {isLoading && (
-              <div className={classes.loadingWrapper}>
-                <BeatLoader color="#26A65B" size="16px" margin="4px" />
-                {/* <CircularProgress/> */}
-              </div>
-            )}
           </div>
           <div className={classes.footer}>
             <Footer />
@@ -370,6 +365,16 @@ class EbookReader extends Component {
             </div>
           </Collapse>
         </div>
+
+        {isLoading && (
+          <div className={classes.loadingWrapper} id="loadingView">
+            <BeatLoader size="16px" margin="4px" color="#26A65B" />
+            {/* <CircularProgress/> */}
+            <div>
+              Generating pagination...
+            </div>
+          </div>
+        )}
       </div>
     );
   }
