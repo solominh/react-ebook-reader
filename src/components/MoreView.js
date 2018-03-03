@@ -46,11 +46,11 @@ class MoreView extends Component {
           </IconButton>
         </Tooltip>
 
-        <Tooltip title="Search" placement="top">
+        {/* <Tooltip title="Search" placement="top">
           <IconButton onClick={toggleSearch}>
             <SearchIcon />
           </IconButton>
-        </Tooltip>
+        </Tooltip> */}
 
         <Tooltip title="Settings" placement="top">
           <IconButton onClick={toggleSettings}>

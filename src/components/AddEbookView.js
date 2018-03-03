@@ -9,7 +9,7 @@ import { selectEbook } from "../actions";
 
 import { withStyles } from "material-ui/styles";
 import OpenEbookIcon from 'material-ui-icons/FileUpload';
-import sampleEpubLink from "../res/ebook/moby-dick.epub";
+import sampleEpubLink from "../res/ebook/dragon-king.epub";
 import Button from 'material-ui/Button';
 
 const styles = theme => ({
