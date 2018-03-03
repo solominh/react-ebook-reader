@@ -187,6 +187,24 @@ class EbookReader extends Component {
       if (callback) callback();
     }
 
+    EPUBJS.Hooks.register("beforeChapterDisplay").clickHalfPageTurn = (callback, renderer) => {
+      renderer.doc.addEventListener('click', (event) => {
+        try {
+          if (event.target.tagName.toLowerCase() == "a") return;
+          if (event.target.parentNode.tagName.toLowerCase() == "a") return;
+        } catch (e) { }
+        var x = event.clientX;
+        var width = document.body.clientWidth;
+        var third = width / 3;
+        if (x < third) {
+          this.props.clickPrevButton()
+        } else if (x > (third * 2)) {
+          this.props.clickNextButton()
+        }
+      });
+      if (callback) callback();
+    };
+
     // Remove select and focus => help page turn by keyboard
     EPUBJS.Hooks.register("beforeChapterDisplay").noSelection = function (callback, renderer) {
       renderer.doc.body.appendChild(document.createElement("style")).innerHTML = [
@@ -313,7 +331,7 @@ class EbookReader extends Component {
             <div className={classes.textWrapper} >
               <div className={classes.text} ref={el => this.renderArea = el} id="area" />
             </div>
-            <div className={classes.navWrapper}>
+            {/* <div className={classes.navWrapper}>
               <div
                 className={cn(classes.arrowWrapper, classes.arrowWrapperLeft)}
                 onClick={clickPrevButton}
@@ -328,7 +346,7 @@ class EbookReader extends Component {
               >
                 <div className={classes.arrowRight}>›</div>
               </div>
-            </div>
+            </div> */}
 
             {isLoading && (
               <div className={classes.loadingWrapper}>
