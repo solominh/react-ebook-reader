@@ -17,7 +17,7 @@ const styles = theme => ({
     width: "100%",
     height: "100%",
     display: "flex",
-    flexDirection:"column",
+    flexDirection: "column",
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: "#E5EDF1"
@@ -25,9 +25,9 @@ const styles = theme => ({
   dropZoneClassName: {
     width: "100%",
     // height: "100%",
-    flex:1,
+    flex: 1,
     display: "flex",
-    alignItems: "center",
+    alignItems: "flex-start",
     justifyContent: "center"
     // border: "2px dashed rgb(102, 102, 102)",
     // borderRadius: 5,
@@ -45,6 +45,7 @@ const styles = theme => ({
     // height: 300,
     fontSize: "1.5rem",
     padding: 8,
+    marginTop: "10%",
     backgroundColor: "#C9DADF",
     outline: "2px dashed #92b0b3",
     outlineOffset: -8,
@@ -59,11 +60,11 @@ const styles = theme => ({
   },
   content: {
     padding: "50px 80px",
-    display:"flex",
-    flexDirection:"column",
-    alignItems:"center"
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center"
   },
-  icon:{
+  icon: {
     color: "#93B0B3",
     width: 100,
     height: 100,
@@ -89,11 +90,11 @@ class AddEbookView extends Component {
   onDrop = (files) => {
     this.setState({ dropzoneActive: false })
     console.log(files);
-    if(files.length ===0) return;
+    if (files.length === 0) return;
     this.props.selectEbook(files[0])
   }
 
-  onViewSampleEbookClick=()=>{
+  onViewSampleEbookClick = () => {
     this.props.selectEbook(sampleEpubLink)
   }
 
@@ -116,7 +117,7 @@ class AddEbookView extends Component {
         >
           <div className={cn(classes.innerWrapper, { [classes.innerWrapperActive]: dropzoneActive })}>
             <div className={classes.content}>
-              <OpenEbookIcon className={classes.icon}/>
+              <OpenEbookIcon className={classes.icon} />
               <div>
                 Choose a .epub file or drag it here
               </div>

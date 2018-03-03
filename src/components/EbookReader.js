@@ -159,7 +159,9 @@ class EbookReader extends Component {
     // Keyboard page turn
     EPUBJS.Hooks.register("beforeChapterDisplay").pageTurns = (callback, renderer) => {
       var lock = false;
+      console.log("chapterDisplay");
       var arrowKeys = (e) => {
+        console.log("arrowKeys");
         e.preventDefault();
         if (lock) return;
         if (e.keyCode == 37) {
