@@ -22,7 +22,7 @@ class Home extends Component {
     const { classes, bookPath } = this.props;
     const el = bookPath ? <EbookReader /> : <AddEbookView />
     return (
-      <div className={classes.wrapper} id="main">
+      <div className={classes.wrapper} id="main" >
         {el}
       </div>
     );

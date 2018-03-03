@@ -183,7 +183,7 @@ class EbookReader extends Component {
         }
 
       };
-      renderer.doc.addEventListener('keydown', arrowKeys, false);
+      renderer.doc.addEventListener('keydown', arrowKeys, true);
       if (callback) callback();
     }
 
@@ -256,6 +256,15 @@ class EbookReader extends Component {
   componentDidMount() {
     this.init();
     this.props.loadEbook(this.props.bookPath, this.renderArea)
+
+    this.pageTurnsListener = e => {
+      if (e.key === "ArrowLeft") {
+        this.props.clickPrevButton()
+      } else if (e.key === "ArrowRight") {
+        this.props.clickNextButton()
+      }
+    };
+    window.document.addEventListener("keydown", this.pageTurnsListener, false);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -265,19 +274,13 @@ class EbookReader extends Component {
   }
 
   componentWillUnmount() {
+    window.document.removeEventListener(this.pageTurnsListener);
+
     if (this.props.book) {
       const { book } = this.props;
       book.off("renderer:locationChanged");
       book.off("renderer:resized");
     }
-  }
-
-  onKeyDown = (e) => {
-    // if (e.key === "ArrowLeft") {
-    //   this.props.clickPrevButton()
-    // } else if (e.key === "ArrowRight") {
-    //   this.props.clickNextButton()
-    // }
   }
 
   render() {
@@ -299,7 +302,6 @@ class EbookReader extends Component {
 
     return (
       <div className={classes.wrapper}
-      // onKeyDown={this.onKeyDown}
       >
 
         <div className={cn(classes.sidebar, { [classes.sidebarOpen]: isTOCOpen || isBookInfoOpen || isSettingsOpen || isSearchOpen })}>
