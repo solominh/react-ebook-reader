@@ -331,12 +331,13 @@ class EbookReader extends Component {
             <div className={classes.textWrapper} >
               <div className={classes.text} ref={el => this.renderArea = el} id="area" />
             </div>
-            {/* <div className={classes.navWrapper}>
+
+            <div className={classes.navWrapper}>
               <div
                 className={cn(classes.arrowWrapper, classes.arrowWrapperLeft)}
                 onClick={clickPrevButton}
               >
-                <div className={classes.arrowLeft}>‹</div>
+                {/* <div className={classes.arrowLeft}>‹</div> */}
               </div>
               <div className={classes.navMiddle} />
 
@@ -344,9 +345,9 @@ class EbookReader extends Component {
                 className={cn(classes.arrowWrapper, classes.arrowWrapperRight)}
                 onClick={clickNextButton}
               >
-                <div className={classes.arrowRight}>›</div>
+                {/* <div className={classes.arrowRight}>›</div> */}
               </div>
-            </div> */}
+            </div>
 
             {isLoading && (
               <div className={classes.loadingWrapper}>

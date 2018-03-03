@@ -18,3 +18,15 @@ html,
 .rc-slider-handle:active {
     box-shadow: 0 0 5px #E0E0E0!important;
 }
+
+a,
+a:link,
+a:visited,
+a:hover,
+a:active {
+    color: inherit;
+    text-decoration: inherit;
+    outline: none !important;
+    border: none;
+    font-weight: inherit;
+}
