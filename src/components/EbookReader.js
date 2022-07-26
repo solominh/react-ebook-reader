@@ -56,7 +56,7 @@ const styles = theme => ({
     position: "relative",
     flex: 1,
     width: "100%",
-    margin: "0 auto"
+    // margin: "0 auto"
   },
   footer: {
     width: "100%"
@@ -82,12 +82,18 @@ const styles = theme => ({
     // margin: "0px 5%",
     // maxWidth: 1250,
     "& iframe": {
-      border: "none"
+      border: "none",
+
+      "& body":{
+        padding: '20px !important'
+      }
     },
   },
   text: {
     flex: 1,
-    margin: "20px 5% 0px 5%"
+    // margin: "20px 5% 0px 5%"
+    margin:'0px !important',
+    padding:0
   },
   navWrapper: {
     width: "100%",
@@ -97,7 +103,7 @@ const styles = theme => ({
     alignItems: "stretch"
   },
   navMiddle: {
-    flex: 1
+    flex: 1,
   },
   arrowWrapper: {
     width: "40%",
@@ -208,21 +214,21 @@ class EbookReader extends Component {
     };
 
     // Remove select and focus => help page turn by keyboard
-    EPUBJS.Hooks.register("beforeChapterDisplay").noSelection = function (callback, renderer) {
-      renderer.doc.body.appendChild(document.createElement("style")).innerHTML = [
-        "* {",
-        "    -webkit-user-select: none;",
-        "    -moz-user-select: none;",
-        "    -ms-user-select: none;",
-        "    user-select: none;",
-        "    -webkit-user-drag: none;",
-        "    -moz-user-drag: none;",
-        "    -ms-user-drag: none;",
-        "    user-drag: none;",
-        "}"
-      ].join("\n");
-      if (callback) callback();
-    };
+    // EPUBJS.Hooks.register("beforeChapterDisplay").noSelection = function (callback, renderer) {
+    //   renderer.doc.body.appendChild(document.createElement("style")).innerHTML = [
+    //     "* {",
+    //     "    -webkit-user-select: none;",
+    //     "    -moz-user-select: none;",
+    //     "    -ms-user-select: none;",
+    //     "    user-select: none;",
+    //     "    -webkit-user-drag: none;",
+    //     "    -moz-user-drag: none;",
+    //     "    -ms-user-drag: none;",
+    //     "    user-drag: none;",
+    //     "}"
+    //   ].join("\n");
+    //   if (callback) callback();
+    // };
 
     // Add column-rule to ebook
     EPUBJS.Hooks.register("beforeChapterDisplay").styles = (callback, renderer) => {
@@ -334,12 +340,12 @@ class EbookReader extends Component {
               <div className={classes.text} ref={el => this.renderArea = el} id="area" />
             </div>
 
-            <div className={classes.navWrapper}>
+            {/* <div className={classes.navWrapper}>
               <div
                 className={cn(classes.arrowWrapper, classes.arrowWrapperLeft)}
                 onClick={clickPrevButton}
               >
-                {/* <div className={classes.arrowLeft}>‹</div> */}
+                <div className={classes.arrowLeft}>‹</div>
               </div>
               <div className={classes.navMiddle} />
 
@@ -347,9 +353,9 @@ class EbookReader extends Component {
                 className={cn(classes.arrowWrapper, classes.arrowWrapperRight)}
                 onClick={clickNextButton}
               >
-                {/* <div className={classes.arrowRight}>›</div> */}
+                <div className={classes.arrowRight}>›</div>
               </div>
-            </div>
+            </div> */}
           </div>
           <div className={classes.footer}>
             <Footer />

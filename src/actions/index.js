@@ -141,7 +141,10 @@ export const loadEbook = (bookPath, renderArea) => {
     // });
 
     renderArea.innerHTML = ""
-    book.renderTo(renderArea);
+    book.renderTo(renderArea,{
+      allowScriptedContent: true,
+      view:'inline'
+    });
 
     try {
       await book.ready.all;
